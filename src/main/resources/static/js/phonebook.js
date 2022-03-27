@@ -169,25 +169,6 @@ new Vue({
             });
         },
 
-        exportContacts() {
-            //window.open(("/phonebook/export"), "_blank");
-            // TODO: implement excel export
-            $.ajax({
-                type: "GET",
-                url: "/phonebook/rpc/api/v1/export",
-            }).done(response => {
-                const url = window.URL.createObjectURL(new Blob([response]));
-                const link = document.createElement("a");
-                link.href = url;
-                link.setAttribute("download", "phonebook.xlsx");
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }).fail(ajaxRequest => {
-                console.log(ajaxRequest);
-            });
-        },
-
         loadData(term) {
             let termPath = "";
 
