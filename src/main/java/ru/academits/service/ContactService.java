@@ -23,37 +23,41 @@ public class ContactService {
     public ContactValidation validateContact(Contact contact) {
         ContactValidation contactValidation = new ContactValidation();
         contactValidation.setValid(true);
+
         if (contact.getFirstName().isEmpty()) {
             contactValidation.setValid(false);
-            contactValidation.setError("Поле Имя должно быть заполнено.");
+            contactValidation.setError("First name is required");
             return contactValidation;
         }
 
         if (contact.getLastName().isEmpty()) {
             contactValidation.setValid(false);
-            contactValidation.setError("Поле Фамилия должно быть заполнено.");
+            contactValidation.setError("Last name is required");
             return contactValidation;
         }
 
         if (contact.getPhone().isEmpty()) {
             contactValidation.setValid(false);
-            contactValidation.setError("Поле Телефон должно быть заполнено.");
+            contactValidation.setError("Telephone is required");
             return contactValidation;
         }
 
         if (isExistContactWithPhone(contact.getPhone())) {
             contactValidation.setValid(false);
-            contactValidation.setError("Номер телефона не должен дублировать другие номера в телефонной книге.");
+            contactValidation.setError("Phone provided is already exists in the phonebook");
             return contactValidation;
         }
+
         return contactValidation;
     }
 
     public ContactValidation addContact(Contact contact) {
         ContactValidation contactValidation = validateContact(contact);
+
         if (contactValidation.isValid()) {
             contactDao.create(contact);
         }
+
         return contactValidation;
     }
 

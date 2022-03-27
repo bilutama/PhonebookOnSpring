@@ -18,6 +18,9 @@ public class Contact {
     @Column
     private String phone;
 
+    @Column
+    private boolean important;
+
 
     public Long getId() {
         return id;
@@ -49,5 +52,13 @@ public class Contact {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public boolean getImportant() {
+        return important;
+    }
+
+    public void setImportant(boolean important) {
+        this.important = important;
     }
 }

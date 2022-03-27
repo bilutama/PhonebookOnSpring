@@ -2,12 +2,10 @@ package ru.academits.dto;
 
 public class ContactDto {
     private Long id;
-
     private String firstName;
-
     private String lastName;
-
     private String phone;
+    private boolean important;
 
     public Long getId() {
         return id;
@@ -39,5 +37,13 @@ public class ContactDto {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public boolean getImportant() {
+        return important;
+    }
+
+    public void setImportant(boolean important) {
+        this.important = important;
     }
 }

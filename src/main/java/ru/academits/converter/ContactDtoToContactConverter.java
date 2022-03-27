@@ -14,6 +14,7 @@ public class ContactDtoToContactConverter extends AbstractConverter<ContactDto, 
         c.setFirstName(source.getFirstName());
         c.setLastName(source.getLastName());
         c.setPhone(source.getPhone());
+        c.setImportant(source.getImportant());
 
         return c;
     }

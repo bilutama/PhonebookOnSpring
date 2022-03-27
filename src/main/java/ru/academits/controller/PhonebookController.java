@@ -13,24 +13,28 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @Controller
-@RequestMapping("/phoneBook/rpc/api/v1")
-public class PhoneBookController {
-    private static final Logger logger = LoggerFactory.getLogger(PhoneBookController.class);
+@RequestMapping("/phonebook/rpc/api/v1")
+public class PhonebookController {
+    private static final Logger logger = LoggerFactory.getLogger(PhonebookController.class);
 
     private final ContactService contactService;
     private final ContactDtoToContactConverter contactDtoToContactConverter;
     private final ContactToContactDtoConverter contactToContactDtoConverter;
 
-    public PhoneBookController(ContactService contactService, ContactDtoToContactConverter contactDtoToContactConverter, ContactToContactDtoConverter contactToContactDtoConverter) {
+    public PhonebookController(ContactService contactService, ContactDtoToContactConverter contactDtoToContactConverter, ContactToContactDtoConverter contactToContactDtoConverter) {
         this.contactService = contactService;
         this.contactDtoToContactConverter = contactDtoToContactConverter;
         this.contactToContactDtoConverter = contactToContactDtoConverter;
     }
 
-    @RequestMapping(value = "getAllContacts", method = RequestMethod.GET)
+    @RequestMapping(value = {"getContacts/", "getContacts/{term}"}, method = RequestMethod.POST)
     @ResponseBody
-    public List<ContactDto> getAllContacts() {
-        logger.info("called method getAllContacts");
+    public List<ContactDto> getContacts(@PathVariable(required = false) String term) {
+        // === LOGGING START ===
+        String logMessage = String.format("getContacts is called with term = \"%s\"", term == null ? "" : term);
+        logger.info(logMessage);
+        // === LOGGING END ===
+
         return contactToContactDtoConverter.convert(contactService.getAllContacts());
     }
 
