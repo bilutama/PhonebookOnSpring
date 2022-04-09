@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ContactDao extends GenericDao<Contact, Long> {
-    List<Contact> getAllContacts(boolean includeDeleted);
+    List<Contact> getContacts(String term, boolean includeDeleted);
 
     List<Contact> findByPhone(String phone);
 

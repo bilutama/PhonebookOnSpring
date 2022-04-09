@@ -39,7 +39,7 @@ public class PhonebookController {
         logger.info(logMessage);
         // === LOGGING END ===
 
-        return contactToContactDtoConverter.convert(contactService.getAllContacts(INCLUDE_DELETED));
+        return contactToContactDtoConverter.convert(contactService.getContacts(term, INCLUDE_DELETED));
     }
 
     @RequestMapping(value = "addContact", method = RequestMethod.POST)

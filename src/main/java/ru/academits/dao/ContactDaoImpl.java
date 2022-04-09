@@ -18,8 +18,8 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
     }
 
     @Override
-    public List<Contact> getAllContacts(boolean includeDeleted) {
-        return findAll(false);
+    public List<Contact> getContacts(String term, boolean includeDeleted) {
+        return find(term, false);
     }
 
     @Override

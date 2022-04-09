@@ -47,7 +47,7 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
     @Transactional
     @Override
-    public List<T> findAll(boolean includeDeleted) {
+    public List<T> find(String term, boolean includeDeleted) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(clazz);
 
@@ -56,6 +56,15 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         if (!includeDeleted) {
             criteriaQuery.where(criteriaBuilder.equal(root.get("isDeleted"), true));
         }
+
+        String finalTerm = String.format("%%%s%%", term);
+
+        criteriaQuery.where(
+                criteriaBuilder.or(
+                        criteriaBuilder.like(root.get("firstName"), finalTerm),
+                        criteriaBuilder.like(root.get("lastName"), finalTerm),
+                        criteriaBuilder.like(root.get("phone"), finalTerm))
+        );
 
         CriteriaQuery<T> select = criteriaQuery.select(root);
         TypedQuery<T> typedQuery = entityManager.createQuery(select);

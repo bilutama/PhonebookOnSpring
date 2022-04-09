@@ -62,8 +62,8 @@ public class ContactService {
         return contactValidation;
     }
 
-    public List<Contact> getAllContacts(boolean includeDeleted) {
-        return contactDao.getAllContacts(includeDeleted);
+    public List<Contact> getContacts(String term, boolean includeDeleted) {
+        return contactDao.getContacts(term, includeDeleted);
     }
 
     public boolean setContactsAsDeleted(ArrayList<Long> contactsIds) {
