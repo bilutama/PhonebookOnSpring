@@ -5,7 +5,7 @@
 Клиентская часть: HTML, CSS, JS, Vue.js, Bootstrap
 Серверная часть: spring-framework
 Связь БД и Java: hibernate
-БД: MySQL установленная на компьютероре, схема phonebook, логин и пароль root
+БД: MySQL установленная на компьютере, схема phonebook, логин и пароль root
 Сборка: spring + maven
 Запуск: spring + tomcat
 
@@ -18,8 +18,8 @@
 - Таблицу звонков + API для получения звонков по контакту
 
 Как запустить проект
-- Run PhoneBookSpringApplication - данная команда собирает проект и запускает PhoneBookSpringApplication main
-- Debug PhoneBookSpringApplication - данная команда собирает проект в режиме дебаг и запускает phoneBookSpringApplication main
+- Run PhoneBookSpringApplication - данная команда собирает проект и запускает PhonebookSpringApplication main
+- Debug PhoneBookSpringApplication - данная команда собирает проект в режиме дебаг и запускает PhoneBookSpringApplication main
 
 Отладка серверной части:
 1) запустите проект в режиме дебаг

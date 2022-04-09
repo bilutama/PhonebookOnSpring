@@ -21,6 +21,8 @@ public class Contact {
     @Column
     private boolean important;
 
+    @Column
+    private boolean isDeleted;
 
     public Long getId() {
         return id;
@@ -60,5 +62,13 @@ public class Contact {
 
     public void setImportant(boolean important) {
         this.important = important;
+    }
+
+    public boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

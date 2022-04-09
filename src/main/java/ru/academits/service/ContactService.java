@@ -5,6 +5,7 @@ import ru.academits.dao.ContactDao;
 import ru.academits.model.Contact;
 import ru.academits.model.ContactValidation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -61,7 +62,11 @@ public class ContactService {
         return contactValidation;
     }
 
-    public List<Contact> getAllContacts() {
-        return contactDao.getAllContacts();
+    public List<Contact> getAllContacts(boolean includeDeleted) {
+        return contactDao.getAllContacts(includeDeleted);
+    }
+
+    public boolean setContactsAsDeleted(ArrayList<Long> contactsIds) {
+        return contactDao.setDeletedByIds(contactsIds);
     }
 }

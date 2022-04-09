@@ -47,15 +47,19 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
     @Transactional
     @Override
-    public List<T> findAll() {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<T> cq = cb.createQuery(clazz);
+    public List<T> findAll(boolean includeDeleted) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(clazz);
 
-        Root<T> root = cq.from(clazz);
+        Root<T> root = criteriaQuery.from(clazz);
 
-        CriteriaQuery<T> select = cq.select(root);
-        TypedQuery<T> q = entityManager.createQuery(select);
+        if (!includeDeleted) {
+            criteriaQuery.where(criteriaBuilder.equal(root.get("isDeleted"), true));
+        }
 
-        return q.getResultList();
+        CriteriaQuery<T> select = criteriaQuery.select(root);
+        TypedQuery<T> typedQuery = entityManager.createQuery(select);
+
+        return typedQuery.getResultList();
     }
 }

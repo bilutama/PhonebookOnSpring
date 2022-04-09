@@ -118,11 +118,13 @@
                         <td>{{ row.phone }}</td>
                         <td>
                             <div class="form-check form-switch">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       role="switch"
-                                       v-model="row.important"
-                                       @click="toggleImportant(row.id)">
+                                <label>
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           role="switch"
+                                           v-model="row.important"
+                                           @click="toggleImportant(row.id)">
+                                </label>
                             </div>
                         </td>
                         <td>

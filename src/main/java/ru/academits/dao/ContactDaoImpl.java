@@ -6,7 +6,9 @@ import ru.academits.model.Contact;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -16,22 +18,40 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
     }
 
     @Override
-    public List<Contact> getAllContacts() {
-        return findAll();
+    public List<Contact> getAllContacts(boolean includeDeleted) {
+        return findAll(false);
+    }
+
+    @Override
+    public boolean setDeletedByIds(ArrayList<Long> contactsIds) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Contact> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(clazz);
+
+        Root<Contact> root = criteriaUpdate.from(clazz);
+        criteriaUpdate.set("isDeleted", true);
+
+        // Update for all contacts with ids from contactsIds
+        for (Long id : contactsIds) {
+            criteriaUpdate.where(criteriaBuilder.equal(root.get("id"), id));
+            entityManager.createQuery(criteriaUpdate).executeUpdate();
+        }
+
+        // TODO: always returns true
+        return true;
     }
 
     @Override
     public List<Contact> findByPhone(String phone) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Contact> cq = cb.createQuery(clazz);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Contact> criteriaQuery = criteriaBuilder.createQuery(clazz);
 
-        Root<Contact> root = cq.from(clazz);
+        Root<Contact> root = criteriaQuery.from(clazz);
 
-        cq.where(cb.equal(root.get("phone"), phone));
+        criteriaQuery.where(criteriaBuilder.equal(root.get("phone"), phone));
 
-        CriteriaQuery<Contact> select = cq.select(root);
-        TypedQuery<Contact> q = entityManager.createQuery(select);
+        CriteriaQuery<Contact> select = criteriaQuery.select(root);
+        TypedQuery<Contact> query = entityManager.createQuery(select);
 
-        return q.getResultList();
+        return query.getResultList();
     }
 }

@@ -10,11 +10,14 @@ import ru.academits.service.ContactService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/phonebook/rpc/api/v1")
 public class PhonebookController {
+    private static final boolean INCLUDE_DELETED = false;
+
     private static final Logger logger = LoggerFactory.getLogger(PhonebookController.class);
 
     private final ContactService contactService;
@@ -31,17 +34,43 @@ public class PhonebookController {
     @ResponseBody
     public List<ContactDto> getContacts(@PathVariable(required = false) String term) {
         // === LOGGING START ===
-        String logMessage = String.format("getContacts is called with term = \"%s\"", term == null ? "" : term);
+        String finalTerm = term == null ? "" : term;
+        String logMessage = String.format("getContacts is called with term = \"%s\"", finalTerm);
         logger.info(logMessage);
         // === LOGGING END ===
 
-        return contactToContactDtoConverter.convert(contactService.getAllContacts());
+        return contactToContactDtoConverter.convert(contactService.getAllContacts(INCLUDE_DELETED));
     }
 
     @RequestMapping(value = "addContact", method = RequestMethod.POST)
     @ResponseBody
     public ContactValidation addContact(@RequestBody ContactDto contact) {
         return contactService.addContact(contactDtoToContactConverter.convert(contact));
+    }
+
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean setContactsAsDeleted(@RequestBody ArrayList<Long> contactIds) {
+        boolean contactAreSetAsDeleted = contactService.setContactsAsDeleted(contactIds);
+
+        // === LOGGING START ===
+        String contactIdsString = contactIds.stream()
+                .map(Object::toString)
+                .reduce((t, u) -> t + ", " + u)
+                .orElse("");
+
+        String logMessage;
+
+        if (contactAreSetAsDeleted) {
+            logMessage = String.format("Contacts with IDs = %s are set as deleted.", contactIdsString);
+        } else {
+            logMessage = String.format("Contacts with IDs = %s were not set as deleted. Possible reason: no such contacts in the database.", contactIdsString);
+        }
+
+        logger.info(logMessage);
+        // === LOGGING END ===
+
+        return contactAreSetAsDeleted;
     }
 }
 

@@ -1,11 +1,9 @@
 package ru.academits.dao;
 
-import org.hibernate.criterion.Order;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 public interface GenericDao<T, PK extends Serializable> {
     @Transactional
@@ -20,5 +18,5 @@ public interface GenericDao<T, PK extends Serializable> {
     T getById(PK id);
 
     @Transactional
-    List<T> findAll();
+    List<T> findAll(boolean includeDeleted);
 }
