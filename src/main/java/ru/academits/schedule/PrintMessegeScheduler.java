@@ -4,9 +4,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmailScheduler {
+public class PrintMessegeScheduler {
     @Scheduled(fixedRate = 100000)
-    public void sendEmailWithContactList(){
-        System.out.println("Scheduler!");
+    public void PrintMessage(){
+        System.out.println("Scheduler is triggered");
     }
 }

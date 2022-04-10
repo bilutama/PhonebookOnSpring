@@ -2,7 +2,7 @@ package ru.academits.model;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "Contact")
 @Table(name = "contact")
 public class Contact {
     @Id
