@@ -51,4 +51,11 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
 
         return query.getResultList();
     }
+
+    @Override
+    public void toggleImportant(Long contactId) {
+        Contact contact = getById(contactId);
+        contact.setImportant(!contact.getImportant()); // Toggle contact importance
+        update(contact);
+    }
 }

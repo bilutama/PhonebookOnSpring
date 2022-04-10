@@ -7,8 +7,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -53,20 +55,24 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
         Root<T> root = criteriaQuery.from(clazz);
 
+        List<Predicate> predicates = new ArrayList<>();
+        Predicate notDeletedPredicate = criteriaBuilder.equal(root.get("isDeleted"), false);
+        predicates.add(notDeletedPredicate);
+
+        // Add predicates to filter if term is passed
         if (term != null && !term.equals("")) {
             String finalTerm = "%" + term + "%";
 
-            criteriaQuery.where(
-                    criteriaBuilder.and(
-                            criteriaBuilder.equal(root.get("isDeleted"), false),
-                            criteriaBuilder.or(
-                                    criteriaBuilder.like(root.get("firstName"), finalTerm),
-                                    criteriaBuilder.like(root.get("lastName"), finalTerm),
-                                    criteriaBuilder.like(root.get("phone"), finalTerm)
-                            )
-                    )
+            Predicate contactContentsPredicate = criteriaBuilder.or(
+                    criteriaBuilder.like(root.get("firstName"), finalTerm),
+                    criteriaBuilder.like(root.get("lastName"), finalTerm),
+                    criteriaBuilder.like(root.get("phone"), finalTerm)
             );
+
+            predicates.add(contactContentsPredicate);
         }
+
+        criteriaQuery.where(criteriaBuilder.and(predicates.toArray(Predicate[]::new)));
 
         CriteriaQuery<T> select = criteriaQuery.select(root);
         TypedQuery<T> typedQuery = entityManager.createQuery(select);

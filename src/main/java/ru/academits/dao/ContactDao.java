@@ -11,4 +11,6 @@ public interface ContactDao extends GenericDao<Contact, Long> {
     List<Contact> findByPhone(String phone);
 
     void setDeletedByIds(ArrayList<Long> contactsIds);
+
+    void toggleImportant(Long contactId);
 }

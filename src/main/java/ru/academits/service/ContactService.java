@@ -69,4 +69,8 @@ public class ContactService {
     public void setContactsAsDeleted(ArrayList<Long> contactsIds) {
         contactDao.setDeletedByIds(contactsIds);
     }
+
+    public void toggleImportant(Long contactId) {
+        contactDao.toggleImportant(contactId);
+    }
 }

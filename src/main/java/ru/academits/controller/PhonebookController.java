@@ -61,6 +61,17 @@ public class PhonebookController {
         logger.info(logMessage);
         // === LOGGING END ===
     }
+
+    @RequestMapping(value = "toggleImportant/{contactId}", method = RequestMethod.POST)
+    @ResponseBody
+    public void toggleImportant(@PathVariable Long contactId) {
+        contactService.toggleImportant(contactId);
+
+        // === LOGGING START ===
+        String logMessage = String.format("Toggling importance for contact ID=%d changed.", contactId);
+        logger.info(logMessage);
+        // === LOGGING END ===
+    }
 }
 
 
