@@ -43,6 +43,11 @@ public class PhonebookController {
     @RequestMapping(value = "addContact", method = RequestMethod.POST)
     @ResponseBody
     public ContactValidation addContact(@RequestBody ContactDto contact) {
+        // === LOGGING START ===
+        String logMessage = String.format("Adding contact %s %s, phone %s", contact.getFirstName(), contact.getLastName(), contact.getPhone());
+        logger.info(logMessage);
+        // === LOGGING END ===
+
         return contactService.addContact(contactDtoToContactConverter.convert(contact));
     }
 
