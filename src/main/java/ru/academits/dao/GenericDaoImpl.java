@@ -53,18 +53,20 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
         Root<T> root = criteriaQuery.from(clazz);
 
-        String finalTerm = String.format("%%%s%%", term);
+        if (term != null && !term.equals("")) {
+            String finalTerm = "%" + term + "%";
 
-        criteriaQuery.where(
-                criteriaBuilder.and(
-                        criteriaBuilder.equal(root.get("isDeleted"), false),
-                        criteriaBuilder.or(
-                                criteriaBuilder.like(root.get("firstName"), finalTerm),
-                                criteriaBuilder.like(root.get("lastName"), finalTerm),
-                                criteriaBuilder.like(root.get("phone"), finalTerm)
-                        )
-                )
-        );
+            criteriaQuery.where(
+                    criteriaBuilder.and(
+                            criteriaBuilder.equal(root.get("isDeleted"), false),
+                            criteriaBuilder.or(
+                                    criteriaBuilder.like(root.get("firstName"), finalTerm),
+                                    criteriaBuilder.like(root.get("lastName"), finalTerm),
+                                    criteriaBuilder.like(root.get("phone"), finalTerm)
+                            )
+                    )
+            );
+        }
 
         CriteriaQuery<T> select = criteriaQuery.select(root);
         TypedQuery<T> typedQuery = entityManager.createQuery(select);

@@ -28,7 +28,7 @@ public class PhonebookController {
         this.contactToContactDtoConverter = contactToContactDtoConverter;
     }
 
-    @RequestMapping(value = {"getContacts/", "getContacts/{term}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"getContacts", "getContacts/{term}"}, method = RequestMethod.POST)
     @ResponseBody
     public List<ContactDto> getContacts(@PathVariable(required = false) String term) {
         // === LOGGING START ===
