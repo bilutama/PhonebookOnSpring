@@ -53,18 +53,24 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
         Root<T> root = criteriaQuery.from(clazz);
 
-        if (!includeDeleted) {
-            criteriaQuery.where(criteriaBuilder.equal(root.get("isDeleted"), true));
+        // Not including contacts marked as deleted
+        if (term == null || term.equals("")) {
+            criteriaQuery.where(criteriaBuilder.equal(root.get("isDeleted"), includeDeleted));
+        } else {
+            String finalTerm = String.format("%%%s%%", term);
+
+            criteriaQuery.where(
+                    criteriaBuilder.and(
+                            criteriaBuilder.equal(root.get("isDeleted"), !includeDeleted),
+                            criteriaBuilder.or(
+                                    criteriaBuilder.like(root.get("firstName"), finalTerm),
+                                    criteriaBuilder.like(root.get("lastName"), finalTerm),
+                                    criteriaBuilder.like(root.get("phone"), finalTerm)
+                            )
+                    )
+            );
+
         }
-
-        String finalTerm = String.format("%%%s%%", term);
-
-        criteriaQuery.where(
-                criteriaBuilder.or(
-                        criteriaBuilder.like(root.get("firstName"), finalTerm),
-                        criteriaBuilder.like(root.get("lastName"), finalTerm),
-                        criteriaBuilder.like(root.get("phone"), finalTerm))
-        );
 
         CriteriaQuery<T> select = criteriaQuery.select(root);
         TypedQuery<T> typedQuery = entityManager.createQuery(select);
