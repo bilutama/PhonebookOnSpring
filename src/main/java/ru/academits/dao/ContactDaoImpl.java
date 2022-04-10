@@ -35,8 +35,6 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
             criteriaUpdate.where(criteriaBuilder.equal(root.get("id"), thisId));
             entityManager.createQuery(criteriaUpdate).executeUpdate();
         }
-
-
     }
 
     @Override
