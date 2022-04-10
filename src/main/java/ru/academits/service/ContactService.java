@@ -62,11 +62,11 @@ public class ContactService {
         return contactValidation;
     }
 
-    public List<Contact> getContacts(String term, boolean includeDeleted) {
-        return contactDao.getContacts(term, includeDeleted);
+    public List<Contact> getContacts(String term) {
+        return contactDao.getContacts(term);
     }
 
-    public boolean setContactsAsDeleted(ArrayList<Long> contactsIds) {
-        return contactDao.setDeletedByIds(contactsIds);
+    public void setContactsAsDeleted(ArrayList<Long> contactsIds) {
+        contactDao.setDeletedByIds(contactsIds);
     }
 }

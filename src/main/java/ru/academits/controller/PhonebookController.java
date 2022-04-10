@@ -16,8 +16,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/phonebook/rpc/api/v1")
 public class PhonebookController {
-    private static final boolean INCLUDE_DELETED = false;
-
     private static final Logger logger = LoggerFactory.getLogger(PhonebookController.class);
 
     private final ContactService contactService;
@@ -39,7 +37,7 @@ public class PhonebookController {
         logger.info(logMessage);
         // === LOGGING END ===
 
-        return contactToContactDtoConverter.convert(contactService.getContacts(term, INCLUDE_DELETED));
+        return contactToContactDtoConverter.convert(contactService.getContacts(term));
     }
 
     @RequestMapping(value = "addContact", method = RequestMethod.POST)
@@ -50,8 +48,8 @@ public class PhonebookController {
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
-    public boolean setContactsAsDeleted(@RequestBody ArrayList<Long> contactIds) {
-        boolean contactAreSetAsDeleted = contactService.setContactsAsDeleted(contactIds);
+    public void setContactsAsDeleted(@RequestBody ArrayList<Long> contactIds) {
+        contactService.setContactsAsDeleted(contactIds);
 
         // === LOGGING START ===
         String contactIdsString = contactIds.stream()
@@ -59,18 +57,9 @@ public class PhonebookController {
                 .reduce((t, u) -> t + ", " + u)
                 .orElse("");
 
-        String logMessage;
-
-        if (contactAreSetAsDeleted) {
-            logMessage = String.format("Contacts with IDs = %s are set as deleted.", contactIdsString);
-        } else {
-            logMessage = String.format("Contacts with IDs = %s were not set as deleted. Possible reason: no such contacts in the database.", contactIdsString);
-        }
-
+        String logMessage = String.format("Contacts with IDs = %s are set as deleted.", contactIdsString);
         logger.info(logMessage);
         // === LOGGING END ===
-
-        return contactAreSetAsDeleted;
     }
 }
 

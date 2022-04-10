@@ -18,12 +18,12 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
     }
 
     @Override
-    public List<Contact> getContacts(String term, boolean includeDeleted) {
-        return find(term, false);
+    public List<Contact> getContacts(String term) {
+        return find(term);
     }
 
     @Override
-    public boolean setDeletedByIds(ArrayList<Long> contactsIds) {
+    public void setDeletedByIds(ArrayList<Long> contactsIds) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Contact> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(clazz);
 
@@ -35,9 +35,6 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
             criteriaUpdate.where(criteriaBuilder.equal(root.get("id"), id));
             entityManager.createQuery(criteriaUpdate).executeUpdate();
         }
-
-        // TODO: always returns true
-        return true;
     }
 
     @Override
