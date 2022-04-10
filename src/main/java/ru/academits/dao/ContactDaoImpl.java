@@ -28,7 +28,7 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
         CriteriaUpdate<Contact> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(clazz);
 
         Root<Contact> root = criteriaUpdate.from(clazz);
-        criteriaUpdate.set("isDeleted", true);
+        criteriaUpdate.set("isDeleted", false);
 
         // Update for all contacts with ids from contactsIds
         for (Long id : contactsIds) {
