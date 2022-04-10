@@ -4,10 +4,7 @@ import org.springframework.stereotype.Repository;
 import ru.academits.model.Contact;
 
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +41,13 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
 
         Root<Contact> root = criteriaQuery.from(clazz);
 
-        criteriaQuery.where(criteriaBuilder.equal(root.get("phone"), phone));
+        Predicate phonePredicate = criteriaBuilder.equal(root.get("phone"), phone);
+        Predicate notDeletedPredicate = criteriaBuilder.equal(root.get("isDeleted"), false);
+
+        criteriaQuery.where(criteriaBuilder.and(
+                phonePredicate,
+                notDeletedPredicate)
+        );
 
         CriteriaQuery<Contact> select = criteriaQuery.select(root);
         TypedQuery<Contact> query = entityManager.createQuery(select);
