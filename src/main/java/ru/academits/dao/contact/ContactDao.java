@@ -1,11 +1,11 @@
-package ru.academits.dao;
+package ru.academits.dao.contact;
 
 import ru.academits.model.Contact;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public interface ContactDao extends GenericDao<Contact, Long> {
+public interface ContactDao extends GenericContactDao<Contact, Long> {
     List<Contact> getContacts(String term);
 
     List<Contact> findByPhone(String phone);

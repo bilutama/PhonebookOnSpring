@@ -1,4 +1,4 @@
-package ru.academits.dao;
+package ru.academits.dao.contact;
 
 import org.springframework.stereotype.Repository;
 import ru.academits.model.Contact;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements ContactDao {
+public class ContactDaoImpl extends GenericContactDaoImpl<Contact, Long> implements ContactDao {
     public ContactDaoImpl() {
         super(Contact.class);
     }
