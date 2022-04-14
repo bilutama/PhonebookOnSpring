@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CallDao extends GenericCallDao<Call, Long> {
 
-    List<Call> getCalls();
+    List<Call> getCalls(Long contactId);
 
     void setDeletedByIds(ArrayList<Long> contactsIds);
 }

@@ -14,8 +14,8 @@ public class CallDaoImpl extends GenericCallDaoImpl<Call, Long> implements CallD
     }
 
     @Override
-    public List<Call> getCalls() {
-        return findAll();
+    public List<Call> getCalls(Long contactId) {
+        return find(contactId);
     }
 
     @Override

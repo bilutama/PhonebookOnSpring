@@ -19,8 +19,8 @@ public class CallService {
         callDao.create(call);
     }
 
-    public List<Call> getCalls(){
-        return callDao.getCalls();
+    public List<Call> getCalls(Long contactId){
+        return callDao.getCalls(contactId);
     }
 
     public void setCallsAsDeleted(ArrayList<Long> callsIds) {

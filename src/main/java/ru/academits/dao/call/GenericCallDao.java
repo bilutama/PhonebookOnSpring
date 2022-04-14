@@ -15,5 +15,5 @@ public interface GenericCallDao<T, C extends Serializable> {
     T getById(C id);
 
     @Transactional
-    List<T> findAll();
+    List<T> find(Long contactId);
 }

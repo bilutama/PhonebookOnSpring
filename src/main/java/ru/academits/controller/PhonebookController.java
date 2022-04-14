@@ -108,14 +108,18 @@ public class PhonebookController {
         // === LOGGING END ===
     }
 
-    @RequestMapping(value = {"getCalls"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"getCalls", "getCalls/{contactId}"}, method = RequestMethod.POST)
     @ResponseBody
-    public List<CallDto> getCalls() {
+    public List<CallDto> getCalls(@PathVariable(required = false) Long contactId) {
         // === LOGGING START ===
-        logger.info("getCalls method is called");
+        if (contactId == null) {
+            logger.info("getCalls method is called");
+        } else {
+            logger.info("getCalls method is called for contact with id = " + contactId);
+        }
         // === LOGGING END ===
 
-        return callToCallDtoConverter.convert(callService.getCalls());
+        return callToCallDtoConverter.convert(callService.getCalls(contactId));
     }
 
     @RequestMapping(value = "deleteCalls", method = RequestMethod.POST)

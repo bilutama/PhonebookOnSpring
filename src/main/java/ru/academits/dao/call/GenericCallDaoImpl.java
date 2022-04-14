@@ -40,14 +40,21 @@ public class GenericCallDaoImpl<T, C extends Serializable> implements GenericCal
 
     @Transactional
     @Override
-    public List<T> findAll() {
+    public List<T> find(Long contactId) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(clazz);
 
         Root<T> root = criteriaQuery.from(clazz);
 
-        // Select only not deleted entries
-        criteriaQuery.where(criteriaBuilder.equal(root.get("isDeleted"), false));
+        if (contactId != null) {
+            criteriaQuery.where(criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("isDeleted"), false),
+                    criteriaBuilder.equal(root.get("callContactId"), contactId))
+            );
+        } else {
+            criteriaQuery.where(criteriaBuilder.equal(root.get("isDeleted"), false));
+        }
+
         CriteriaQuery<T> select = criteriaQuery.select(root);
         TypedQuery<T> typedQuery = entityManager.createQuery(select);
 
