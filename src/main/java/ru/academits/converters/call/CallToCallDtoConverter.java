@@ -1,19 +1,19 @@
-package ru.academits.converter;
+package ru.academits.converters.call;
 
 import org.springframework.stereotype.Service;
+import ru.academits.converters.AbstractConverter;
 import ru.academits.dto.CallDto;
 import ru.academits.model.Call;
 
 @Service
-public class CallDtoToCallConverter extends AbstractConverter<CallDto, Call> {
+public class CallToCallDtoConverter extends AbstractConverter<Call, CallDto> {
     @Override
-    public Call convert(CallDto source) {
-        Call c = new Call();
+    public CallDto convert(Call source) {
+        CallDto c = new CallDto();
 
         c.setId(source.getId());
         c.setCallContactId(source.getCallContactId());
         c.setCallTime(source.getCallTime());
-        c.setDeleted(false);
 
         return c;
     }

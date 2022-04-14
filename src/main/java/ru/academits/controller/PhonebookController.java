@@ -2,10 +2,10 @@ package ru.academits.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.academits.converter.CallDtoToCallConverter;
-import ru.academits.converter.CallToCallDtoConverter;
-import ru.academits.converter.ContactDtoToContactConverter;
-import ru.academits.converter.ContactToContactDtoConverter;
+import ru.academits.converters.call.CallDtoToCallConverter;
+import ru.academits.converters.call.CallToCallDtoConverter;
+import ru.academits.converters.contact.ContactDtoToContactConverter;
+import ru.academits.converters.contact.ContactToContactDtoConverter;
 import ru.academits.dto.CallDto;
 import ru.academits.dto.ContactDto;
 import ru.academits.model.ContactValidation;
