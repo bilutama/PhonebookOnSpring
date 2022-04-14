@@ -94,7 +94,7 @@ public class PhonebookController {
 
     @RequestMapping(value = "addCall", method = RequestMethod.POST)
     @ResponseBody
-    public void addCall(@PathVariable Long callId) {
+    public void addCall(@RequestBody Long callId) {
         // Add a call with info
         CallDto call = new CallDto();
         call.setCallContactId(callId);

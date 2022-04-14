@@ -151,17 +151,31 @@ new Vue({
             new bootstrap.Modal($("#delete_confirmation_modal"), {}).show();
         },
 
-        confirmDelete(contactIds) {
+        confirmDelete(contactsIds) {
             $.ajax({
                 type: "POST",
                 url: "/phonebook/rpc/api/v1/delete",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(contactIds)
+                data: JSON.stringify(contactsIds)
             }).done(() => {
                 this.serverValidation = false;
                 this.contactForDelete = null;
                 // Clear selectedRowsIds array from contacts ids that were deleted
                 this.selectedRowsIds = this.selectedRowsIds.filter(deletedContactId => !this.contactIdsForDelete.includes(deletedContactId));
+            }).fail(ajaxRequest => {
+                console.log(ajaxRequest);
+            }).always(() => {
+                this.loadData(this.term);
+            });
+        },
+
+        addCall(contactId) {
+            $.ajax({
+                type: "POST",
+                url: "/phonebook/rpc/api/v1/addCall",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(contactId)
+            }).done(() => {
             }).fail(ajaxRequest => {
                 console.log(ajaxRequest);
             }).always(() => {
