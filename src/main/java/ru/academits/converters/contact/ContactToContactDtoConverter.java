@@ -1,6 +1,7 @@
-package ru.academits.converter;
+package ru.academits.converters.contact;
 
 import org.springframework.stereotype.Service;
+import ru.academits.converters.AbstractConverter;
 import ru.academits.dto.ContactDto;
 import ru.academits.model.Contact;
 

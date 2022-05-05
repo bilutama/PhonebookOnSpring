@@ -1,0 +1,47 @@
+@startuml
+skinparam maxMessageSize 160
+
+actor User
+participant Browser
+participant Server
+database SQLdb
+
+== Open Phonebook, load all contacts ==
+User->Browser: open Phonebook's main page
+Browser->Server: send GET request with empty term
+Server->SQLdb: execute SELECT query for contacts marked as not deleted
+SQLdb->Server: respond with contacts
+Server->Browser: send contacts to browser as JSON array
+Browser->User: show loaded contacts' details
+
+== search contacts ==
+User->Browser: type term in a search field
+Browser->Server: send GET request with term="..."
+Server->SQLdb: execute SELECT query for contacts marked as not deleted containing term in contact details
+SQLdb->Server: respond with contacts matched request
+Server->Browser: send filtered contacts to browser as JSON array
+Browser->User: show filtered contacts' details in table
+
+== add a new contact ==
+User->Browser: fill contact details, press the "Add contact" button
+Browser->Browser: check if a new contact's phone exists in the Phonebook
+Browser->Server: send POST request with contact's details
+Server->SQLdb: add new entry in database
+Server->Browser: respond with success
+Browser->Server: get all contacts
+Server->SQLdb: execute SELECT query for contacts marked as not deleted
+SQLdb->Server: respond with contacts
+Server->Browser: send contacts to browser as JSON array
+Browser->User: show updated contacts' details
+
+== delete contacts (one or multiple) ==
+User->Browser: pick contacts to delete (one or multiple)
+Browser->Server: send POST request with contacts ids
+Server->SQLdb: send request to mark contacts as deleted
+Server->Browser: respond with success
+Browser->Server: get all contacts
+Server->SQLdb: execute SELECT query for contacts marked as not deleted
+SQLdb->Server: respond with contacts
+Server->Browser: send contacts to browser as JSON array
+Browser->User: show updated contacts' details
+@enduml

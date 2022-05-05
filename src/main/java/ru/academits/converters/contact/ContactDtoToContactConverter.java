@@ -1,6 +1,7 @@
-package ru.academits.converter;
+package ru.academits.converters.contact;
 
 import org.springframework.stereotype.Service;
+import ru.academits.converters.AbstractConverter;
 import ru.academits.dto.ContactDto;
 import ru.academits.model.Contact;
 
@@ -15,7 +16,7 @@ public class ContactDtoToContactConverter extends AbstractConverter<ContactDto, 
         c.setLastName(source.getLastName());
         c.setPhone(source.getPhone());
         c.setImportant(source.getImportant());
-        c.setIsDeleted(false);
+        c.setDeleted(false);
 
         return c;
     }

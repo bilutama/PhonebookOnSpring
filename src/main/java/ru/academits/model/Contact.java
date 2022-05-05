@@ -68,7 +68,7 @@ public class Contact {
         return isDeleted;
     }
 
-    public void setIsDeleted(boolean isDeleted) {
+    public void setDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 }
