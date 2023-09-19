@@ -1,9 +1,9 @@
 # Phonebook #
 
 **The course project of a personal phonebook**
-Frontend: HTML, CSS, JS, Vue.js, Bootstrap
-Backend: Spring framework + Hibernate + MySQL (scheme:phonebook, login: root, password: Admin123!)
-Build: Spring + Maven
+- Frontend: HTML, CSS, JS, Vue.js, Bootstrap
+- Backend: Spring framework + Hibernate + MySQL (schema:phonebook, login: root, password: Admin123!)
+- Build: Spring + Maven
 
 **Project functionality**
 - Display existing contacts
