@@ -11,3 +11,7 @@
 - Deleting contacts (without actual deleting records from the database)
 - Switching <importance> of contacts
 - Call table + API for receiving calls by contact
+
+**To run the project**
+- Run MySQL server with 'phonebook' data base
+- Run Maven Spring Application
