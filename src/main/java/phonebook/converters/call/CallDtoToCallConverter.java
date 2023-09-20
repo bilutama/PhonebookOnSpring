@@ -2,8 +2,8 @@ package phonebook.converters.call;
 
 import org.springframework.stereotype.Service;
 import phonebook.converters.AbstractConverter;
-import phonebook.model.Call;
 import phonebook.dto.CallDto;
+import phonebook.model.Call;
 
 @Service
 public class CallDtoToCallConverter extends AbstractConverter<CallDto, Call> {
