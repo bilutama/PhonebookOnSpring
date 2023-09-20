@@ -1,8 +1,8 @@
 # Phonebook #
 
-**The course project of a personal phonebook**
+**Started as a course project**
 - Frontend: HTML, CSS, JS, Vue.js, Bootstrap
-- Backend: Spring framework + Hibernate + MySQL (schema:phonebook, login: root, password: Admin123!)
+- Backend: Spring framework + Hibernate + H2 / MySQL
 - Build: Spring + Maven
 
 **Project functionality**
@@ -13,5 +13,9 @@
 - Call table + API for receiving calls by contact
 
 **To run the project**
-- Run MySQL server with 'phonebook' data base
+- Run Maven Spring Application (H2 In-memory data base will run by default)
+  or
+- Get Docker
+- Run MySQL service from /docker/docker-compose.yml
+- Amend application.properties to use MySQL insted of H2
 - Run Maven Spring Application
