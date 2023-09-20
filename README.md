@@ -1,6 +1,6 @@
 # Phonebook #
 
-**Started as a course project**
+**Started as a course project, further development to practice**
 - Frontend: HTML, CSS, JS, Vue.js, Bootstrap
 - Backend: Spring framework + Hibernate + H2 / MySQL
 - Build: Spring + Maven
@@ -17,5 +17,5 @@
   or
 - Get Docker
 - Run MySQL service from /docker/docker-compose.yml
-- Amend application.properties to use MySQL insted of H2
+- Amend application.properties to use MySQL instead of H2
 - Run Maven Spring Application
