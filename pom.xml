@@ -4,33 +4,37 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.phonebook</groupId>
-    <artifactId>phonebookonspring</artifactId>
+    <artifactId>PhonebookOnSpring</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>PhonebookOnSpring</name>
+    <name>phonebook-on-spring</name>
     <description/>
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-framework-bom.version>2.7.8</spring-framework-bom.version>
+        <junit-pom.version>5.8.2</junit-pom.version>
         <java.version>11</java.version>
         <log4j.version>2.17.2</log4j.version>
         <slf4j.version>1.7.36</slf4j.version>
+        <mysql-connector.version>8.0.33</mysql-connector.version>
+        <h2-database.version>2.1.214</h2-database.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring-framework-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>5.8.2</version>
+                <version>${junit-pom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -62,19 +66,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>2.7.5</version>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
+            <version>${mysql-connector.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.1.214</version> <!-- Use the latest version -->
+            <version>${h2-database.version}</version>
             <scope>runtime</scope>
         </dependency>
 
