@@ -16,7 +16,7 @@ import phonebook.dto.CallDto;
 import phonebook.dto.ContactDto;
 import phonebook.model.ContactValidation;
 import phonebook.service.CallService;
-import phonebook.service.ContactServiceImpl;
+import phonebook.service.ContactService;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ import java.util.List;
 public class PhonebookController {
     private static final Logger logger = LoggerFactory.getLogger(PhonebookController.class);
 
-    private final ContactServiceImpl contactServiceImpl;
+    private final ContactService contactService;
     private final ContactDtoToContactConverter contactDtoToContactConverter;
     private final ContactToContactDtoConverter contactToContactDtoConverter;
 
@@ -37,8 +37,8 @@ public class PhonebookController {
 
     private final CallToCallDtoConverter callToCallDtoConverter;
 
-    public PhonebookController(ContactServiceImpl contactServiceImpl, ContactDtoToContactConverter contactDtoToContactConverter, ContactToContactDtoConverter contactToContactDtoConverter, CallService callService, CallDtoToCallConverter callDtoToCallConverter, CallToCallDtoConverter callToCallDtoConverter) {
-        this.contactServiceImpl = contactServiceImpl;
+    public PhonebookController(ContactService contactService, ContactDtoToContactConverter contactDtoToContactConverter, ContactToContactDtoConverter contactToContactDtoConverter, CallService callService, CallDtoToCallConverter callDtoToCallConverter, CallToCallDtoConverter callToCallDtoConverter) {
+        this.contactService = contactService;
         this.contactDtoToContactConverter = contactDtoToContactConverter;
         this.contactToContactDtoConverter = contactToContactDtoConverter;
         this.callService = callService;
@@ -51,7 +51,7 @@ public class PhonebookController {
     public List<ContactDto> getContacts(@PathVariable(required = false) String term) {
         logger.info("getContacts is called with term=\"{}\"", term == null ? "" : term);
 
-        return contactToContactDtoConverter.convert(contactServiceImpl.getContacts(term));
+        return contactToContactDtoConverter.convert(contactService.getContacts(term));
     }
 
     @PostMapping(value = "addContact")
@@ -59,13 +59,13 @@ public class PhonebookController {
     public ContactValidation addContact(@RequestBody ContactDto contact) {
         logger.info("Adding contact {} {}, phone {}", contact.getFirstName(), contact.getLastName(), contact.getPhone());
 
-        return contactServiceImpl.addContact(contactDtoToContactConverter.convert(contact));
+        return contactService.saveContact(contactDtoToContactConverter.convert(contact));
     }
 
     @PostMapping(value = "delete")
     @ResponseBody
     public void setContactsAsDeleted(@RequestBody List<Long> contactIds) {
-        contactServiceImpl.setContactsAsDeleted(contactIds);
+        contactService.setContactsAsDeleted(contactIds);
 
         String ids = Arrays.toString(contactIds.toArray());
         logger.info("Contacts with IDs={} are set as deleted.", ids);
@@ -74,7 +74,7 @@ public class PhonebookController {
     @PostMapping(value = "toggleImportant/{contactId}")
     @ResponseBody
     public void toggleImportant(@PathVariable Long contactId) {
-        contactServiceImpl.toggleImportant(contactId);
+        contactService.toggleImportant(contactId);
 
         logger.info("Toggling importance for contact ID={} changed", contactId);
     }

@@ -1,6 +1,5 @@
 package phonebook.dao.contact;
 
-import org.springframework.stereotype.Repository;
 import phonebook.model.Contact;
 
 import javax.persistence.TypedQuery;
@@ -11,7 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository
+//@Repository
 public class ContactDaoImpl extends GenericContactDaoImpl<Contact, Long> implements ContactDao {
     public ContactDaoImpl() {
         super(Contact.class);

@@ -1,23 +1,24 @@
 package phonebook.service;
 
 import org.springframework.stereotype.Service;
-import phonebook.dao.contact.ContactDao;
 import phonebook.model.Contact;
 import phonebook.model.ContactValidation;
+import phonebook.repository.ContactRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class ContactServiceImpl {
-	private final ContactDao contactDao;
+public class ContactServiceImpl implements ContactService {
+	private final ContactRepository contactRepository;
 
-	public ContactServiceImpl(ContactDao contactDao) {
-		this.contactDao = contactDao;
+	public ContactServiceImpl(ContactRepository contactRepository) {
+		this.contactRepository = contactRepository;
 	}
 
 	private boolean isExistContactWithPhone(String phone) {
-		List<Contact> contactList = contactDao.findByPhone(phone);
-		return !contactList.isEmpty();
+		Optional<Contact> contact = contactRepository.findByPhone(phone);
+		return contact.isPresent();
 	}
 
 	public ContactValidation validateContact(Contact contact) {
@@ -51,25 +52,25 @@ public class ContactServiceImpl {
 		return contactValidation;
 	}
 
-	public ContactValidation addContact(Contact contact) {
+	public ContactValidation saveContact(Contact contact) {
 		ContactValidation contactValidation = validateContact(contact);
 
 		if (contactValidation.isValid()) {
-			contactDao.create(contact);
+			contactRepository.save(contact);
 		}
 
 		return contactValidation;
 	}
 
 	public List<Contact> getContacts(String term) {
-		return contactDao.getContacts(term);
+		return contactRepository.findContacts(term);
 	}
 
 	public void setContactsAsDeleted(List<Long> contactsIds) {
-		contactDao.setDeletedByIds(contactsIds);
+		contactRepository.setDeletedByIds(contactsIds);
 	}
 
 	public void toggleImportant(Long contactId) {
-		contactDao.toggleImportant(contactId);
+		contactRepository.toggleImportant(contactId);
 	}
 }

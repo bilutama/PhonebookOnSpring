@@ -6,9 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import phonebook.dao.contact.ContactDao;
 import phonebook.model.Contact;
 import phonebook.model.ContactValidation;
@@ -27,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ContactServiceImpl")
-class ContactServiceImplTest {
+class ContactServiceTest {
 	@InjectMocks
 	ContactServiceImpl contactService;
 
@@ -71,7 +68,7 @@ class ContactServiceImplTest {
 
 		//when(contactDao.create(contact)).thenReturn();
 
-		ContactValidation result = contactService.addContact(contact);
+		ContactValidation result = contactService.saveContact(contact);
 
 		assertTrue(result.isValid());
 		assertNull(result.getError());
@@ -85,7 +82,7 @@ class ContactServiceImplTest {
 		contact.setLastName("Doe");
 		contact.setPhone("123-456-7890");
 
-		ContactValidation result = contactService.addContact(contact);
+		ContactValidation result = contactService.saveContact(contact);
 
 		assertFalse(result.isValid());
 		assertEquals("First name is required", result.getError());
