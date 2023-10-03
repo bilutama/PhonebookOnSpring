@@ -18,7 +18,7 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	private boolean isExistContactWithPhone(String phone) {
-		Optional<Contact> contact = contactRepository.findByPhone(phone);
+		Optional<Contact> contact = contactRepository.findByPhoneAndNotDeleted(phone);
 		return contact.isPresent();
 	}
 

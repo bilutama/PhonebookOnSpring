@@ -32,5 +32,8 @@ public interface ContactRepository extends CrudRepository<Contact, Long> {
 		"WHERE c.id IN (:contactIds)")
 	void setDeletedByIds(@Param("contactIds") List<Long> contactIds);
 
-	Optional<Contact> findByPhone(String phone);
+	@Query("SELECT c FROM Contact AS c WHERE " +
+		"c.isDeleted IS FALSE AND " +
+		"LOWER(c.phone) = LOWER(:phone)")
+	Optional<Contact> findByPhoneAndNotDeleted(@Param("phone") String phone);
 }
