@@ -25,90 +25,108 @@ import java.util.List;
 @Controller
 @RequestMapping("/phonebook/rpc/api/v1")
 public class PhonebookController {
-    private static final Logger logger = LoggerFactory.getLogger(PhonebookController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PhonebookController.class);
 
-    private final ContactService contactService;
-    private final ContactDtoToContactConverter contactDtoToContactConverter;
-    private final ContactToContactDtoConverter contactToContactDtoConverter;
+	private final ContactService contactService;
 
-    private final CallService callService;
+	private final ContactDtoToContactConverter contactDtoToContactConverter;
 
-    private final CallDtoToCallConverter callDtoToCallConverter;
+	private final ContactToContactDtoConverter contactToContactDtoConverter;
 
-    private final CallToCallDtoConverter callToCallDtoConverter;
+	private final CallService callService;
 
-    public PhonebookController(ContactService contactService, ContactDtoToContactConverter contactDtoToContactConverter, ContactToContactDtoConverter contactToContactDtoConverter, CallService callService, CallDtoToCallConverter callDtoToCallConverter, CallToCallDtoConverter callToCallDtoConverter) {
-        this.contactService = contactService;
-        this.contactDtoToContactConverter = contactDtoToContactConverter;
-        this.contactToContactDtoConverter = contactToContactDtoConverter;
-        this.callService = callService;
-        this.callDtoToCallConverter = callDtoToCallConverter;
-        this.callToCallDtoConverter = callToCallDtoConverter;
-    }
+	private final CallDtoToCallConverter callDtoToCallConverter;
 
-    @PostMapping(value = {"getContacts", "getContacts/{term}"})
-    @ResponseBody
-    public List<ContactDto> getContacts(@PathVariable(required = false) String term) {
-        logger.info("getContacts is called with term=\"{}\"", term == null ? "" : term);
+	private final CallToCallDtoConverter callToCallDtoConverter;
 
-        return contactToContactDtoConverter.convert(contactService.getContacts(term));
-    }
+	public PhonebookController(
+		ContactService contactService,
+		ContactDtoToContactConverter contactDtoToContactConverter,
+		ContactToContactDtoConverter contactToContactDtoConverter,
+		CallService callService,
+		CallDtoToCallConverter callDtoToCallConverter,
+		CallToCallDtoConverter callToCallDtoConverter
+	) {
+		this.contactService = contactService;
+		this.contactDtoToContactConverter = contactDtoToContactConverter;
+		this.contactToContactDtoConverter = contactToContactDtoConverter;
+		this.callService = callService;
+		this.callDtoToCallConverter = callDtoToCallConverter;
+		this.callToCallDtoConverter = callToCallDtoConverter;
+	}
 
-    @PostMapping(value = "addContact")
-    @ResponseBody
-    public ContactValidation addContact(@RequestBody ContactDto contact) {
-        logger.info("Adding contact {} {}, phone {}", contact.getFirstName(), contact.getLastName(), contact.getPhone());
+	@PostMapping(value = {"findContacts", "findContacts/{term}"})
+	@ResponseBody
+	public List<ContactDto> getContacts(@PathVariable(required = false) String term) {
+		logger.info(
+			"Received POST request to find {}contacts with term=\"{}\"",
+			term == null ? "all " : "",
+			term == null ? "" : "with term=\"" + term + "\""
+		);
 
-        return contactService.saveContact(contactDtoToContactConverter.convert(contact));
-    }
+		return contactToContactDtoConverter.convert(contactService.getContacts(term));
+	}
 
-    @PostMapping(value = "delete")
-    @ResponseBody
-    public void setContactsAsDeleted(@RequestBody List<Long> contactIds) {
-        contactService.setContactsAsDeleted(contactIds);
+	@PostMapping(value = "saveContact")
+	@ResponseBody
+	public ContactValidation saveContact(@RequestBody ContactDto contact) {
+		logger.info(
+			"Received POST request to save a new contact for {} {}, phone {}",
+			contact.getFirstName(),
+			contact.getLastName(),
+			contact.getPhone()
+		);
 
-        String ids = Arrays.toString(contactIds.toArray());
-        logger.info("Contacts with IDs={} are set as deleted.", ids);
-    }
+		return contactService.saveContact(contactDtoToContactConverter.convert(contact));
+	}
 
-    @PostMapping(value = "toggleImportant/{contactId}")
-    @ResponseBody
-    public void toggleImportant(@PathVariable Long contactId) {
-        contactService.toggleImportant(contactId);
+	@PostMapping(value = "deleteContacts")
+	@ResponseBody
+	public void setContactsAsDeleted(@RequestBody List<Long> contactIds) {
+		contactService.setContactsAsDeleted(contactIds);
 
-        logger.info("Toggling importance for contact ID={} changed", contactId);
-    }
+		String ids = Arrays.toString(contactIds.toArray());
+		logger.info("Received POST request to set contacts with IDs={} as deleted", ids);
+	}
 
-    @PostMapping(value = "addCall")
-    @ResponseBody
-    public void addCall(@RequestBody Long callId) {
-        CallDto call = new CallDto();
-        call.setCallContactId(callId);
-        call.setCallTime(new Timestamp(System.currentTimeMillis()));
+	@PostMapping(value = "toggleImportant/{contactId}")
+	@ResponseBody
+	public void toggleImportant(@PathVariable Long contactId) {
+		contactService.toggleImportant(contactId);
 
-        callService.addCall(callDtoToCallConverter.convert(call));
+		logger.info("Received POST request to toggle importance for contact ID={}", contactId);
+	}
 
-        logger.info("A contact with ID={} was called", callId);
-    }
+	@PostMapping(value = "saveCall")
+	@ResponseBody
+	public void saveCall(@RequestBody Long callId) {
+		CallDto call = new CallDto();
+		call.setCallContactId(callId);
+		call.setCallTime(new Timestamp(System.currentTimeMillis()));
 
-    @PostMapping(value = {"getCalls", "getCalls/{contactId}"})
-    @ResponseBody
-    public List<CallDto> getCalls(@PathVariable(required = false) Long contactId) {
-        if (contactId == null) {
-            logger.info("getCalls method is called");
-        } else {
-            logger.info("getCalls method is called for contact with id={}", contactId);
-        }
+		callService.saveCall(callDtoToCallConverter.convert(call));
 
-        return callToCallDtoConverter.convert(callService.getCalls(contactId));
-    }
+		logger.info("Received POST request to call the contact with ID={}", callId);
+	}
 
-    @PostMapping(value = "deleteCalls")
-    @ResponseBody
-    public void setCallsAsDeleted(@RequestBody List<Long> callsIds) {
-        callService.setCallsAsDeleted(callsIds);
+	@PostMapping(value = {"findCalls", "getCalls/{callContactId}"})
+	@ResponseBody
+	public List<CallDto> findCalls(@PathVariable(required = false) Long callContactId) {
+		logger.info(
+			"Received POST request to find{} calls{}",
+			callContactId == null ? " all" : "",
+			callContactId == null ? "" : " for contact with id=" + callContactId
+		);
 
-        String ids = Arrays.toString(callsIds.toArray());
-        logger.info("Calls with IDs={} are set as deleted.", ids);
-    }
+		return callToCallDtoConverter.convert(callService.getCalls(callContactId));
+	}
+
+	@PostMapping(value = "deleteCalls")
+	@ResponseBody
+	public void setCallsAsDeleted(@RequestBody List<Long> callsIds) {
+		callService.setCallsAsDeleted(callsIds);
+
+		String ids = Arrays.toString(callsIds.toArray());
+		logger.info("Received POST request to set calls with IDs={} as deleted.", ids);
+	}
 }
