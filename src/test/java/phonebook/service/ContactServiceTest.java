@@ -6,9 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import phonebook.dao.contact.ContactDao;
 import phonebook.model.Contact;
 import phonebook.model.ContactValidation;
+import phonebook.repository.ContactRepository;
 import phonebook.service.impl.ContactServiceImpl;
 
 import java.util.ArrayList;
@@ -24,13 +24,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("ContactServiceImpl")
+@DisplayName("ContactServiceTest")
 class ContactServiceTest {
 	@InjectMocks
 	ContactServiceImpl contactService;
 
 	@Mock
-	private ContactDao contactDao;
+	private ContactRepository contactRepository;
 
 	@Test
 	void testValidateContact_ValidContact() {
@@ -73,7 +73,7 @@ class ContactServiceTest {
 
 		assertTrue(result.isValid());
 		assertNull(result.getError());
-		verify(contactDao, times(1)).create(contact);
+		verify(contactRepository, times(1)).save(contact);
 	}
 
 	@Test
@@ -87,7 +87,7 @@ class ContactServiceTest {
 
 		assertFalse(result.isValid());
 		assertEquals("First name is required", result.getError());
-		verify(contactDao, never()).create(contact);
+		verify(contactRepository, never()).save(contact);
 	}
 
 	@Test
@@ -95,11 +95,11 @@ class ContactServiceTest {
 		String searchTerm = "John";
 		List<Contact> expectedContacts = new ArrayList<>();
 
-		when(contactDao.getContacts(searchTerm)).thenReturn(expectedContacts);
+		when(contactRepository.findContacts(searchTerm)).thenReturn(expectedContacts);
 
 		List<Contact> result = contactService.getContacts(searchTerm);
 
 		assertEquals(expectedContacts, result);
-		verify(contactDao, times(1)).getContacts(searchTerm);
+		verify(contactRepository, times(1)).findContacts(searchTerm);
 	}
 }
