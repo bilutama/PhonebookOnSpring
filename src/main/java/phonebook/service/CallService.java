@@ -1,28 +1,14 @@
 package phonebook.service;
 
-import org.springframework.stereotype.Service;
-import phonebook.dao.call.CallDao;
 import phonebook.model.Call;
 
 import java.util.List;
 
-@Service
-public class CallService {
-	private final CallDao callDao;
+public interface CallService {
 
-	public CallService(CallDao callDao) {
-		this.callDao = callDao;
-	}
+	void saveCall(Call call);
 
-	public void addCall(Call call) {
-		callDao.create(call);
-	}
+	List<Call> getCalls(Long callContactId);
 
-	public List<Call> getCalls(Long contactId) {
-		return callDao.getCalls(contactId);
-	}
-
-	public void setCallsAsDeleted(List<Long> callsIds) {
-		callDao.setDeletedByIds(callsIds);
-	}
+	void setCallsAsDeleted(List<Long> callIds);
 }

@@ -1,9 +1,10 @@
-package phonebook.service;
+package phonebook.service.impl;
 
 import org.springframework.stereotype.Service;
 import phonebook.model.Contact;
 import phonebook.model.ContactValidation;
 import phonebook.repository.ContactRepository;
+import phonebook.service.ContactService;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class ContactServiceImpl implements ContactService {
 		return contact.isPresent();
 	}
 
+	@Override
 	public ContactValidation validateContact(Contact contact) {
 		ContactValidation contactValidation = new ContactValidation();
 		contactValidation.setValid(true);
@@ -52,6 +54,7 @@ public class ContactServiceImpl implements ContactService {
 		return contactValidation;
 	}
 
+	@Override
 	public ContactValidation saveContact(Contact contact) {
 		ContactValidation contactValidation = validateContact(contact);
 
@@ -62,14 +65,17 @@ public class ContactServiceImpl implements ContactService {
 		return contactValidation;
 	}
 
+	@Override
 	public List<Contact> getContacts(String term) {
 		return contactRepository.findContacts(term);
 	}
 
+	@Override
 	public void setContactsAsDeleted(List<Long> contactsIds) {
 		contactRepository.setDeletedByIds(contactsIds);
 	}
 
+	@Override
 	public void toggleImportant(Long contactId) {
 		contactRepository.toggleImportant(contactId);
 	}

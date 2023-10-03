@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import phonebook.dao.contact.ContactDao;
 import phonebook.model.Contact;
 import phonebook.model.ContactValidation;
+import phonebook.service.impl.ContactServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;

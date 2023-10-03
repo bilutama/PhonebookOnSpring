@@ -29,7 +29,7 @@ public interface ContactRepository extends CrudRepository<Contact, Long> {
 	@Transactional
 	@Modifying(clearAutomatically = true)
 	@Query("UPDATE Contact c SET c.isDeleted = TRUE "+
-		"WHERE c.id IN :contactIds")
+		"WHERE c.id IN (:contactIds)")
 	void setDeletedByIds(@Param("contactIds") List<Long> contactIds);
 
 	Optional<Contact> findByPhone(String phone);
