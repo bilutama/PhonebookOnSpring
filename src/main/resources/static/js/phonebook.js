@@ -81,7 +81,7 @@ new Vue({
             return stringsArray.join(separator);
         },
 
-        addContact() {
+        saveContact() {
             if (this.hasError) {
                 this.validation = true;
                 this.serverValidation = false;
@@ -102,7 +102,7 @@ new Vue({
 
             $.ajax({
                 type: "POST",
-                url: "/phonebook/rpc/api/v1/addContact",
+                url: "/phonebook/rpc/api/v1/saveContact",
                 contentType: "application/json",
                 data: JSON.stringify(contact)
             }).done(() => {
@@ -136,8 +136,7 @@ new Vue({
             this.contactIdsForDelete = contact === null ? this.selectedRowsIds : [contact.id];
 
             // _contactForDelete_ is used to pass contact data to modal dialog
-            // _contactForDelete_ is passed when contact deleted with x button or
-            // when only one contact is selected with checkbox
+            // when contact deleted with x button or when only one contact is selected with checkbox
             if (contact === null) {
                 if (this.contactIdsForDelete.length === 1) {
                     this.contactForDelete = this.rows.filter(row => row.id === this.contactIdsForDelete[0])[0];
@@ -154,7 +153,7 @@ new Vue({
         confirmDelete(contactsIds) {
             $.ajax({
                 type: "POST",
-                url: "/phonebook/rpc/api/v1/delete",
+                url: "/phonebook/rpc/api/v1/deleteContacts",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(contactsIds)
             }).done(() => {
@@ -172,7 +171,7 @@ new Vue({
         addCall(contactId) {
             $.ajax({
                 type: "POST",
-                url: "/phonebook/rpc/api/v1/addCall",
+                url: "/phonebook/rpc/api/v1/saveCall",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(contactId)
             }).done(() => {
@@ -192,7 +191,7 @@ new Vue({
 
             $.ajax({
                 type: "POST",
-                url: "/phonebook/rpc/api/v1/getContacts/" + termPath
+                url: "/phonebook/rpc/api/v1/findContacts/" + termPath
                 //data: term
             }).done(contactListFromServer => {
                 this.rows = this.convertContactList(contactListFromServer);
