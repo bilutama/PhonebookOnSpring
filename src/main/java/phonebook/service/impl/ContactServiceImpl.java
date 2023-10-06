@@ -66,7 +66,7 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	@Override
-	public List<Contact> getContacts(String term) {
+	public List<Contact> findContacts(String term) {
 		return contactRepository.findContacts(term);
 	}
 

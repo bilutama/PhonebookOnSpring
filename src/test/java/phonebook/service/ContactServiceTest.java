@@ -97,7 +97,7 @@ class ContactServiceTest {
 
 		when(contactRepository.findContacts(searchTerm)).thenReturn(expectedContacts);
 
-		List<Contact> result = contactService.getContacts(searchTerm);
+		List<Contact> result = contactService.findContacts(searchTerm);
 
 		assertEquals(expectedContacts, result);
 		verify(contactRepository, times(1)).findContacts(searchTerm);
