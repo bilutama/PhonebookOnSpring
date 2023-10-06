@@ -53,11 +53,11 @@ class ContactDtoToContactConverterTest {
 		source1.setImportant(false);
 
 		ContactDto source2 = new ContactDto();
-		source1.setId(2L);
-		source1.setFirstName("Peter");
-		source1.setLastName("Petrov");
-		source1.setPhone("+7-123-456-0987");
-		source1.setImportant(true);
+		source2.setId(2L);
+		source2.setFirstName("Peter");
+		source2.setLastName("Petrov");
+		source2.setPhone("+7-123-456-0987");
+		source2.setImportant(true);
 
 		List<ContactDto> contactDtoList = List.of(source1, source2);
 
