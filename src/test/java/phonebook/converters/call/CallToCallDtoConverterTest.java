@@ -10,6 +10,7 @@ import phonebook.model.Call;
 import java.sql.Timestamp;
 import java.util.List;
 
+@DisplayName("Call To CallDto Converter")
 public class CallToCallDtoConverterTest {
 	private CallToCallDtoConverter converter;
 
@@ -19,7 +20,7 @@ public class CallToCallDtoConverterTest {
 	}
 
 	@Test
-	@DisplayName("Test converter - single call")
+	@DisplayName("Convert a single call")
 	void testConverterForSingleCall() {
 		// Given
 		Call source = new Call();
@@ -39,7 +40,7 @@ public class CallToCallDtoConverterTest {
 	}
 
 	@Test
-	@DisplayName("Test converter - calls' list")
+	@DisplayName("Converte a list of calls")
 	void testConverterForContactsList() {
 		// Given
 		Call source1 = new Call();

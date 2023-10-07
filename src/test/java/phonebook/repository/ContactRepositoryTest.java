@@ -20,15 +20,8 @@ class ContactRepositoryTest {
 	@BeforeEach
 	void setContactRepository() {
 		// Create sample contacts that match the search term
-		Contact contact1 = new Contact();
-		contact1.setFirstName("John");
-		contact1.setLastName("Doe");
-		contact1.setPhone("123456");
-
-		Contact contact2 = new Contact();
-		contact2.setFirstName("Jane");
-		contact2.setLastName("Smith");
-		contact2.setPhone("789012");
+		Contact contact1 = new Contact("John", "Doe", "+1234567890");
+		Contact contact2 = new Contact("Jane", "Smith", "+1098765432");
 
 		contactRepository.saveAll(List.of(contact1, contact2));
 	}
@@ -37,15 +30,8 @@ class ContactRepositoryTest {
 	@DisplayName("Searching all contacts in the repository")
 	void shouldFindAllContacts() {
 		// Given
-		Contact contact1 = new Contact();
-		contact1.setFirstName("John");
-		contact1.setLastName("Doe");
-		contact1.setPhone("123456");
-
-		Contact contact2 = new Contact();
-		contact2.setFirstName("Jane");
-		contact2.setLastName("Smith");
-		contact2.setPhone("789012");
+		Contact contact1 = new Contact("John", "Doe", "+1234567890");
+		Contact contact2 = new Contact("Jane", "Smith", "+1098765432");
 
 		// Find in the repository
 		List<Contact> result = contactRepository.findContacts("");
@@ -58,10 +44,7 @@ class ContactRepositoryTest {
 	@DisplayName("Searching contacts in the repository by search term")
 	void shouldFindContactBySearchTerm() {
 		// Given
-		Contact contact1 = new Contact();
-		contact1.setFirstName("John");
-		contact1.setLastName("Doe");
-		contact1.setPhone("123456");
+		Contact contact = new Contact("John", "Doe", "+1234567890");
 
 		String searchTerm = "John";
 
@@ -69,6 +52,19 @@ class ContactRepositoryTest {
 		List<Contact> result = contactRepository.findContacts(searchTerm);
 
 		// Assert
-		assertEquals(List.of(contact1), result);
+		assertEquals(List.of(contact), result);
+	}
+
+	@Test
+	@DisplayName("Searching not existing contacts in the repository by search term")
+	void shouldNotFindAnyContactsByTerm() {
+		// Given
+		String searchTerm = "Maria";
+
+		// Find in the repository
+		List<Contact> result = contactRepository.findContacts(searchTerm);
+
+		// Assert
+		assertEquals(List.of(), result);
 	}
 }

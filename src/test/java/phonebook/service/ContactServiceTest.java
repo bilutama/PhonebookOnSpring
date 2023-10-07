@@ -24,16 +24,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("ContactServiceTest")
+@DisplayName("Contact Service")
 class ContactServiceTest {
-	@InjectMocks
-	ContactServiceImpl contactService;
-
 	@Mock
 	private ContactRepository contactRepository;
 
+	@InjectMocks
+	ContactServiceImpl contactService;
+
+
 	@Test
-	void testValidateContact_ValidContact() {
+	void shouldValidateContact() {
 		Contact contact = new Contact();
 		contact.setFirstName("John");
 		contact.setLastName("Doe");
@@ -46,7 +47,7 @@ class ContactServiceTest {
 	}
 
 	@Test
-	void testValidateContact_InvalidFirstName() {
+	void shouldNotValidateContact_InvalidFirstName() {
 		Contact contact = new Contact();
 		contact.setFirstName("");
 		contact.setLastName("Doe");
@@ -58,16 +59,39 @@ class ContactServiceTest {
 		assertEquals("First name is required", result.getError());
 	}
 
-	// Add similar test methods for other validation scenarios
+	@Test
+	void shouldNotValidateContact_InvalidLastName() {
+		Contact contact = new Contact();
+		contact.setFirstName("John");
+		contact.setLastName("");
+		contact.setPhone("123-456-7890");
+
+		ContactValidation result = contactService.validateContact(contact);
+
+		assertFalse(result.isValid());
+		assertEquals("Last name is required", result.getError());
+	}
 
 	@Test
-	void testAddContact_ValidContact() {
+	void shouldNotValidateContact_InvalidPhone() {
+		Contact contact = new Contact();
+		contact.setFirstName("John");
+		contact.setLastName("Doe");
+		contact.setPhone("");
+
+		ContactValidation result = contactService.validateContact(contact);
+
+		assertFalse(result.isValid());
+		assertEquals("Phone is required", result.getError());
+	}
+
+
+	@Test
+	void shouldAddValidContact() {
 		Contact contact = new Contact();
 		contact.setFirstName("John");
 		contact.setLastName("Doe");
 		contact.setPhone("123-456-7890");
-
-		//when(contactDao.create(contact)).thenReturn();
 
 		ContactValidation result = contactService.saveContact(contact);
 
@@ -77,7 +101,7 @@ class ContactServiceTest {
 	}
 
 	@Test
-	void testAddContact_InvalidContact() {
+	void shouldNotAddInvalidContact() {
 		Contact contact = new Contact();
 		contact.setFirstName("");
 		contact.setLastName("Doe");
@@ -91,7 +115,7 @@ class ContactServiceTest {
 	}
 
 	@Test
-	void testGetContacts() {
+	void shouldFindContactsByTerm() {
 		String searchTerm = "John";
 		List<Contact> expectedContacts = new ArrayList<>();
 

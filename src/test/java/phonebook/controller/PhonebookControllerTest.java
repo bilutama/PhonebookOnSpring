@@ -1,6 +1,7 @@
 package phonebook.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,7 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PhonebookController.class)
-public class PhonebookControllerTest {
+@DisplayName("Phonebook Controller")
+class PhonebookControllerTest {
 
 	@Autowired
 	private ObjectMapper mapper;
@@ -50,6 +52,7 @@ public class PhonebookControllerTest {
 	private MockMvc mockMvc;
 
 	@Test
+	@DisplayName("Should return all contacts")
 	public void shouldReturnAllContacts() throws Exception {
 		// Given
 		Contact contact1 = new Contact();

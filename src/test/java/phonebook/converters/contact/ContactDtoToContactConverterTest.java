@@ -9,6 +9,7 @@ import phonebook.model.Contact;
 
 import java.util.List;
 
+@DisplayName("ContactDto To Contact Converter")
 class ContactDtoToContactConverterTest {
 
 	private ContactDtoToContactConverter converter;
@@ -19,7 +20,7 @@ class ContactDtoToContactConverterTest {
 	}
 
 	@Test
-	@DisplayName("Test converter - single contact")
+	@DisplayName("Convert a single contact")
 	void testConverterForSingleContact() {
 		// Given
 		ContactDto source = new ContactDto();
@@ -42,7 +43,7 @@ class ContactDtoToContactConverterTest {
 	}
 
 	@Test
-	@DisplayName("Test converter - contacts' list")
+	@DisplayName("Convert list of contacts")
 	void testConverterForContactsList() {
 		// Given
 		ContactDto source1 = new ContactDto();
