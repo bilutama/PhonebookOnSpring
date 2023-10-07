@@ -20,6 +20,7 @@
         <slf4j.version>1.7.36</slf4j.version>
         <mysql-connector.version>8.0.33</mysql-connector.version>
         <h2-database.version>2.1.214</h2-database.version>
+        <minimum.tests.cover.ratio>0.8</minimum.tests.cover.ratio>
     </properties>
 
     <dependencyManagement>
@@ -163,7 +164,7 @@
                                 <limit>
                                     <counter>LINE</counter>
                                     <value>COVEREDRATIO</value>
-                                    <minimum>0.8</minimum>
+                                    <minimum>${minimum.tests.cover.ratio}</minimum>
                                 </limit>
                             </limits>
                         </rule>
