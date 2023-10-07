@@ -32,12 +32,13 @@ class ContactRepositoryTest {
 		// Given
 		Contact contact1 = new Contact("John", "Doe", "+1234567890");
 		Contact contact2 = new Contact("Jane", "Smith", "+1098765432");
+		List<Contact> expected = List.of(contact1, contact2);
 
-		// Find in the repository
+			// Find in the repository
 		List<Contact> result = contactRepository.findContacts("");
 
 		// Assert
-		assertEquals(List.of(contact1, contact2), result);
+		assertEquals(expected, result);
 	}
 
 	@Test
@@ -45,14 +46,14 @@ class ContactRepositoryTest {
 	void shouldFindContactBySearchTerm() {
 		// Given
 		Contact contact = new Contact("John", "Doe", "+1234567890");
-
+		List<Contact> expected = List.of(contact);
 		String searchTerm = "John";
 
 		// Find in the repository
 		List<Contact> result = contactRepository.findContacts(searchTerm);
 
 		// Assert
-		assertEquals(List.of(contact), result);
+		assertEquals(expected, result);
 	}
 
 	@Test
