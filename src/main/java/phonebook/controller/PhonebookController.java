@@ -109,7 +109,7 @@ public class PhonebookController {
 		logger.info("Received POST request to call the contact with ID={}", callId);
 	}
 
-	@PostMapping(value = {"findCalls", "getCalls/{callContactId}"})
+	@PostMapping(value = {"findCalls", "findCalls/{callContactId}"})
 	@ResponseBody
 	public List<CallDto> findCalls(@PathVariable(required = false) Long callContactId) {
 		logger.info(
