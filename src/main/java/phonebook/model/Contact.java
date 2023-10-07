@@ -30,6 +30,19 @@ public class Contact {
     @Column
     private boolean isDeleted;
 
+    public Contact() {
+    }
+
+    public Contact(
+        final String firstName,
+        final String lastName,
+        final String phone
+    ) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+    }
+
     public Long getId() {
         return id;
     }

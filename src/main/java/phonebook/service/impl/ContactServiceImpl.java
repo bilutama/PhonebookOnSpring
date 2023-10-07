@@ -9,6 +9,11 @@ import phonebook.service.ContactService;
 import java.util.List;
 import java.util.Optional;
 
+import static phonebook.Constants.ContactService.FIRST_NAME_VALIDATION_ERROR_MESSAGE;
+import static phonebook.Constants.ContactService.LAST_NAME_VALIDATION_ERROR_MESSAGE;
+import static phonebook.Constants.ContactService.PHONE_ALREADY_EXISTS_MESSAGE;
+import static phonebook.Constants.ContactService.PHONE_VALIDATION_ERROR_MESSAGE;
+
 @Service
 public class ContactServiceImpl implements ContactService {
 	private final ContactRepository contactRepository;
@@ -29,25 +34,25 @@ public class ContactServiceImpl implements ContactService {
 
 		if (contact.getFirstName().isEmpty()) {
 			contactValidation.setValid(false);
-			contactValidation.setError("First name is required");
+			contactValidation.setError(FIRST_NAME_VALIDATION_ERROR_MESSAGE);
 			return contactValidation;
 		}
 
 		if (contact.getLastName().isEmpty()) {
 			contactValidation.setValid(false);
-			contactValidation.setError("Last name is required");
+			contactValidation.setError(LAST_NAME_VALIDATION_ERROR_MESSAGE);
 			return contactValidation;
 		}
 
 		if (contact.getPhone().isEmpty()) {
 			contactValidation.setValid(false);
-			contactValidation.setError("Telephone is required");
+			contactValidation.setError(PHONE_VALIDATION_ERROR_MESSAGE);
 			return contactValidation;
 		}
 
 		if (isExistContactWithPhone(contact.getPhone())) {
 			contactValidation.setValid(false);
-			contactValidation.setError("Phone provided is already exists in the phonebook");
+			contactValidation.setError(PHONE_ALREADY_EXISTS_MESSAGE);
 			return contactValidation;
 		}
 

@@ -59,7 +59,7 @@ public class PhonebookController {
 	@ResponseBody
 	public List<ContactDto> findContacts(@PathVariable(required = false) String term) {
 		logger.info(
-			"Received POST request to find {}contacts with term=\"{}\"",
+			"Received POST request to find {}contacts{}",
 			term == null ? "all " : "",
 			term == null ? "" : "with term=\"" + term + "\""
 		);
@@ -69,15 +69,15 @@ public class PhonebookController {
 
 	@PostMapping(value = "saveContact")
 	@ResponseBody
-	public ContactValidation saveContact(@RequestBody ContactDto contact) {
+	public ContactValidation saveContact(@RequestBody ContactDto contactDto) {
 		logger.info(
 			"Received POST request to save a new contact for {} {}, phone {}",
-			contact.getFirstName(),
-			contact.getLastName(),
-			contact.getPhone()
+			contactDto.getFirstName(),
+			contactDto.getLastName(),
+			contactDto.getPhone()
 		);
 
-		return contactService.saveContact(contactDtoToContactConverter.convert(contact));
+		return contactService.saveContact(contactDtoToContactConverter.convert(contactDto));
 	}
 
 	@PostMapping(value = "deleteContacts")
