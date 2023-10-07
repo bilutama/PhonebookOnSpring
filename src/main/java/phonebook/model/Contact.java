@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Table(name = "contacts")
@@ -75,5 +76,24 @@ public class Contact {
 
     public void setDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Contact contact = (Contact) o;
+        return Objects.equals(firstName, contact.firstName) &&
+            Objects.equals(lastName, contact.lastName) &&
+            Objects.equals(phone, contact.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, phone);
     }
 }
