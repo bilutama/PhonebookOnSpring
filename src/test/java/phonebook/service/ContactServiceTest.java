@@ -123,9 +123,9 @@ class ContactServiceTest {
 	}
 
 	@ParameterizedTest
-	@DisplayName("All contacts are found by empty or null term")
 	@NullSource
 	@ValueSource(strings = {"", " "})
+	@DisplayName("All contacts are found by empty or null term")
 	void shouldFindContactsByEmptyTerm(@Nullable String term) {
 		Contact contact1 = new Contact("John", "Doe", "+1234567890");
 		Contact contact2 = new Contact("Jane", "Smith", "+1098765432");

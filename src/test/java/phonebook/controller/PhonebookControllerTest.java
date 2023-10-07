@@ -3,6 +3,9 @@ package phonebook.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,6 +21,7 @@ import phonebook.service.ContactService;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -53,7 +57,7 @@ class PhonebookControllerTest {
 
 	@Test
 	@DisplayName("Should return all contacts")
-	public void shouldReturnAllContacts() throws Exception {
+	void shouldReturnAllContacts() throws Exception {
 		// Given
 		Contact contact1 = new Contact();
 		Contact contact2 = new Contact();
@@ -65,8 +69,9 @@ class PhonebookControllerTest {
 
 		final String expectedJson = mapper.writeValueAsString(contactDtos);
 
-		// Whens
-		when(contactService.findContacts(null)).thenReturn(contacts);
+		// Mocking behaviour
+		String term = null;
+		when(contactService.findContacts(term)).thenReturn(contacts);
 		when(contactToContactDtoConverter.convert(contacts)).thenReturn(contactDtos);
 
 		// Assert
