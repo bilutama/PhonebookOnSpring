@@ -58,11 +58,12 @@ public class PhonebookController {
 	@PostMapping(value = {"findContacts", "findContacts/{term}"})
 	@ResponseBody
 	public List<ContactDto> findContacts(@PathVariable(required = false) String term) {
-		logger.info(
-			"Received POST request to find {}contacts{}",
-			term == null ? "all " : "",
-			term == null ? "" : "with term=\"" + term + "\""
-		);
+		if (term == null) {
+			logger.info("Received POST request to find all contacts");
+		} else {
+			term = term.trim();
+			logger.info("Received POST request to find contacts with term=\"{}\"", term);
+		}
 
 		return contactToContactDtoConverter.convert(contactService.findContacts(term));
 	}
