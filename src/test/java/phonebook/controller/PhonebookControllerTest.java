@@ -3,9 +3,12 @@ package phonebook.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import phonebook.converters.call.CallDtoToCallConverter;
 import phonebook.converters.call.CallToCallDtoConverter;
@@ -18,6 +21,9 @@ import phonebook.service.ContactService;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -27,27 +33,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Phonebook Controller")
 class PhonebookControllerTest {
 
+	@Captor
+	ArgumentCaptor<List<Long>> captor;
 	@Autowired
 	private ObjectMapper mapper;
-
 	@MockBean
 	private ContactService contactService;
-
 	@MockBean
 	private ContactDtoToContactConverter contactDtoToContactConverter;
-
 	@MockBean
 	private ContactToContactDtoConverter contactToContactDtoConverter;
-
 	@MockBean
 	private CallService callService;
-
 	@MockBean
 	private CallDtoToCallConverter callDtoToCallConverter;
-
 	@MockBean
 	private CallToCallDtoConverter callToCallDtoConverter;
-
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -74,5 +75,22 @@ class PhonebookControllerTest {
 		mockMvc.perform(post("/phonebook/rpc/api/v1/findContacts"))
 			.andExpect(status().isOk())
 			.andExpect(content().json(expectedJson));
+	}
+
+	@Test
+	@DisplayName("Setting contacts as deleted")
+	void shouldSetContactsAsDeleted() throws Exception {
+		List<Long> contactIdsToDelete = List.of(1L, 2L, 3L);
+		String json = mapper.writeValueAsString(contactIdsToDelete);
+
+		mockMvc.perform(post("/phonebook/rpc/api/v1/deleteContacts")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+			.andExpect(status().isOk());
+
+		verify(contactService, times(1)).setContactsAsDeleted(captor.capture());
+
+		List<Long> capturedContactIds = captor.getValue();
+		assertEquals(contactIdsToDelete, capturedContactIds);
 	}
 }
