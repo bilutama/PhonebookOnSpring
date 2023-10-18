@@ -58,6 +58,8 @@ public class PhonebookController {
 	@PostMapping(value = {"findContacts", "findContacts/{term}"})
 	@ResponseBody
 	public List<ContactDto> findContacts(@PathVariable(required = false) String term) {
+
+
 		if (term == null) {
 			logger.info("Received POST request to find all contacts");
 		} else {
@@ -65,7 +67,7 @@ public class PhonebookController {
 			logger.info("Received POST request to find contacts with term=\"{}\"", term);
 		}
 
-		return contactToContactDtoConverter.convert(contactService.findContacts(term));
+		return contactToContactDtoConverter.convert(contactService.find(term));
 	}
 
 	@PostMapping(value = "saveContact")
@@ -78,13 +80,13 @@ public class PhonebookController {
 			contactDto.getPhone()
 		);
 
-		return contactService.saveContact(contactDtoToContactConverter.convert(contactDto));
+		return contactService.save(contactDtoToContactConverter.convert(contactDto));
 	}
 
 	@PostMapping(value = "deleteContacts")
 	@ResponseBody
 	public void setContactsAsDeleted(@RequestBody List<Long> contactIds) {
-		contactService.setContactsAsDeleted(contactIds);
+		contactService.setAsDeleted(contactIds);
 
 		String ids = Arrays.toString(contactIds.toArray());
 		logger.info("Received POST request to set contacts with IDs={} as deleted", ids);

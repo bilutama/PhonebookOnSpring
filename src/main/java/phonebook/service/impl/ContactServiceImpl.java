@@ -28,7 +28,7 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	@Override
-	public ContactValidation validateContact(Contact contact) {
+	public ContactValidation validate(Contact contact) {
 		ContactValidation contactValidation = new ContactValidation();
 		contactValidation.setValid(true);
 
@@ -60,8 +60,8 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	@Override
-	public ContactValidation saveContact(Contact contact) {
-		ContactValidation contactValidation = validateContact(contact);
+	public ContactValidation save(Contact contact) {
+		ContactValidation contactValidation = validate(contact);
 
 		if (contactValidation.isValid()) {
 			contactRepository.save(contact);
@@ -71,12 +71,16 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	@Override
-	public List<Contact> findContacts(String term) {
-		return contactRepository.findContacts(term);
+	public List<Contact> find(String term) {
+		if (term == null) {
+			return contactRepository.findContacts(null);
+		}
+
+		return contactRepository.findContacts(term.trim());
 	}
 
 	@Override
-	public void setContactsAsDeleted(List<Long> contactsIds) {
+	public void setAsDeleted(List<Long> contactsIds) {
 		contactRepository.setDeletedByIds(contactsIds);
 	}
 

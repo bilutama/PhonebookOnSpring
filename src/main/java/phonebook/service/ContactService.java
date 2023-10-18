@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface ContactService {
 
-	ContactValidation validateContact(Contact contact);
+	ContactValidation validate(Contact contact);
 
-	ContactValidation saveContact(Contact contact);
+	ContactValidation save(Contact contact);
 
-	List<Contact> findContacts(String term);
+	List<Contact> find(String term);
 
-	void setContactsAsDeleted(List<Long> contactsIds);
+	void setAsDeleted(List<Long> contactsIds);
 
 	void toggleImportant(Long contactId);
 }
