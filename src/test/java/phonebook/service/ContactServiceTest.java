@@ -4,8 +4,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,17 +32,21 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Contact Service")
 class ContactServiceTest {
-	@Mock
-	private ContactRepository contactRepository;
-
 	@InjectMocks
 	ContactServiceImpl contactService;
+	@Captor
+	ArgumentCaptor<List<Long>> listArgumentCaptor;
+
+	@Captor
+	ArgumentCaptor<Long> argumentCaptor;
+	@Mock
+	private ContactRepository contactRepository;
 
 	@Test
 	@DisplayName("Contact is not validated - first name is empty")
 	void shouldNotValidateContact_InvalidFirstName() {
 		Contact contact = new Contact("", "Doe", "+1234567890");
-		ContactValidation result = contactService.validateContact(contact);
+		ContactValidation result = contactService.validate(contact);
 
 		assertFalse(result.isValid());
 		assertEquals("First name is required", result.getError());
@@ -51,7 +57,7 @@ class ContactServiceTest {
 	void shouldNotValidateContact_InvalidLastName() {
 		Contact contact = new Contact("John", "", "+1234567890");
 
-		ContactValidation result = contactService.validateContact(contact);
+		ContactValidation result = contactService.validate(contact);
 
 		assertFalse(result.isValid());
 		assertEquals("Last name is required", result.getError());
@@ -62,7 +68,7 @@ class ContactServiceTest {
 	void shouldNotValidateContact_InvalidPhone() {
 		Contact contact = new Contact("John", "Doe", "");
 
-		ContactValidation result = contactService.validateContact(contact);
+		ContactValidation result = contactService.validate(contact);
 
 		assertFalse(result.isValid());
 		assertEquals("Phone is required", result.getError());
@@ -73,7 +79,7 @@ class ContactServiceTest {
 	void shouldValidateAndSaveContact() {
 		Contact contact = new Contact("John", "Doe", "+1234567890");
 
-		ContactValidation result = contactService.saveContact(contact);
+		ContactValidation result = contactService.save(contact);
 
 		assertTrue(result.isValid());
 		verify(contactRepository, times(1)).save(contact);
@@ -89,7 +95,7 @@ class ContactServiceTest {
 		Contact contact2 = new Contact("Mike", "Norton", phone);
 
 		// Save contact1
-		ContactValidation result1 = contactService.saveContact(contact1);
+		ContactValidation result1 = contactService.save(contact1);
 
 		// Asserts
 		assertTrue(result1.isValid());
@@ -99,7 +105,7 @@ class ContactServiceTest {
 		when(contactRepository.findByPhoneAndNotDeleted(phone)).thenReturn(Optional.of(contact1));
 
 		// Save contact2
-		ContactValidation result2 = contactService.saveContact(contact2);
+		ContactValidation result2 = contactService.save(contact2);
 
 		// Asserts
 		assertFalse(result2.isValid());
@@ -116,26 +122,57 @@ class ContactServiceTest {
 
 		when(contactRepository.findContacts(searchTerm)).thenReturn(expectedContacts);
 
-		List<Contact> result = contactService.findContacts(searchTerm);
+		List<Contact> result = contactService.find(searchTerm);
 
 		assertEquals(expectedContacts, result);
 		verify(contactRepository, times(1)).findContacts(searchTerm);
 	}
 
 	@ParameterizedTest
-	@NullSource
-	@ValueSource(strings = {"", " "})
+	@NullAndEmptySource
+	@ValueSource(strings = {" ", "  ", "   "})
 	@DisplayName("All contacts are found by empty or null term")
 	void shouldFindContactsByEmptyTerm(@Nullable String term) {
 		Contact contact1 = new Contact("John", "Doe", "+1234567890");
 		Contact contact2 = new Contact("Jane", "Smith", "+1098765432");
 		List<Contact> expectedContacts = List.of(contact1, contact2);
 
-		when(contactRepository.findContacts(term)).thenReturn(expectedContacts);
+		final String finalSearchTerm = term == null ? null : term.trim();
+		when(contactRepository.findContacts(finalSearchTerm)).thenReturn(expectedContacts);
 
-		List<Contact> result = contactService.findContacts(term);
+		List<Contact> result = contactService.find(term);
 
 		assertEquals(expectedContacts, result);
-		verify(contactRepository, times(1)).findContacts(term);
+		verify(contactRepository, times(1)).findContacts(finalSearchTerm);
+	}
+
+	@Test
+	@DisplayName("Setting contacts as deleted")
+	void shouldSetContactsAsDeleted() {
+		// Given
+		List<Long> contactIds = List.of(1L, 2L, 3L);
+
+		// Call method
+		contactService.setAsDeleted(contactIds);
+
+		// Verify
+		verify(contactRepository, times(1)).setDeletedByIds(listArgumentCaptor.capture());
+		List<Long> capturedContactIds = listArgumentCaptor.getValue();
+		assertEquals(contactIds, capturedContactIds);
+	}
+
+	@Test
+	@DisplayName("Toggle contacts as important")
+	void shouldToggleContactAsImportant() {
+		// Given
+		Long contactId = 1L;
+
+		// Call method
+		contactService.toggleImportant(contactId);
+
+		// Verify
+		verify(contactRepository, times(1)).toggleImportant(argumentCaptor.capture());
+		Long capturedContactId = argumentCaptor.getValue();
+		assertEquals(contactId, capturedContactId);
 	}
 }
