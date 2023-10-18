@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @DisplayName("Call To CallDto Converter")
-public class CallToCallDtoConverterTest {
+class CallToCallDtoConverterTest {
 	private CallToCallDtoConverter converter;
 
 	@BeforeEach
@@ -40,7 +40,7 @@ public class CallToCallDtoConverterTest {
 	}
 
 	@Test
-	@DisplayName("Converte a list of calls")
+	@DisplayName("Convert a list of calls")
 	void testConverterForContactsList() {
 		// Given
 		Call source1 = new Call();

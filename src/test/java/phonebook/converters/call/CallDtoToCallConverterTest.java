@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @DisplayName("CallDto To Call Converter")
-public class CallDtoToCallConverterTest {
+class CallDtoToCallConverterTest {
 
 	private CallDtoToCallConverter converter;
 

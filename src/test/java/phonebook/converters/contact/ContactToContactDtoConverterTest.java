@@ -10,7 +10,7 @@ import phonebook.model.Contact;
 import java.util.List;
 
 @DisplayName("Contact To ContactDto Converter")
-public class ContactToContactDtoConverterTest {
+class ContactToContactDtoConverterTest {
 
 	private ContactToContactDtoConverter converter;
 

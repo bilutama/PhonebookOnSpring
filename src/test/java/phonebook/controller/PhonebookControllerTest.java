@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import phonebook.converters.call.CallDtoToCallConverter;
 import phonebook.converters.call.CallToCallDtoConverter;
 import phonebook.converters.contact.ContactDtoToContactConverter;
@@ -36,24 +35,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Phonebook Controller")
 class PhonebookControllerTest {
 
-	@Captor
-	ArgumentCaptor<List<Long>> captor;
-	@Autowired
-	private ObjectMapper mapper;
 	@MockBean
 	private ContactService contactService;
+
 	@MockBean
 	private ContactDtoToContactConverter contactDtoToContactConverter;
+
 	@MockBean
 	private ContactToContactDtoConverter contactToContactDtoConverter;
+
 	@MockBean
 	private CallService callService;
+
 	@MockBean
 	private CallDtoToCallConverter callDtoToCallConverter;
+
 	@MockBean
 	private CallToCallDtoConverter callToCallDtoConverter;
+
 	@Autowired
 	private MockMvc mockMvc;
+
+	@Captor
+	ArgumentCaptor<List<Long>> listArgumentCaptor;
+
+	@Captor
+	ArgumentCaptor<Long> argumentCaptor;
+
+	@Autowired
+	private ObjectMapper mapper;
 
 	@Test
 	@DisplayName("Should return all contacts with null term")
@@ -67,7 +77,7 @@ class PhonebookControllerTest {
 		ContactDto contactDto2 = new ContactDto();
 		List<ContactDto> contactDtos = List.of(contactDto1, contactDto2);
 
-		final String expectedJson = mapper.writeValueAsString(contactDtos);
+		String expectedJson = mapper.writeValueAsString(contactDtos);
 
 		// Mocking behaviour
 		when(contactService.find(null)).thenReturn(contacts);
@@ -91,22 +101,21 @@ class PhonebookControllerTest {
 		ContactDto contactDto2 = new ContactDto();
 		List<ContactDto> contactDtos = List.of(contactDto1, contactDto2);
 
-		final String expectedJson = mapper.writeValueAsString(contactDtos);
+		String expectedJson = mapper.writeValueAsString(contactDtos);
 
 		// Mocking behaviour
-		final String finalSearchTerm = term.trim();
-		when(contactService.find(finalSearchTerm)).thenReturn(contacts);
+		String emptyTerm = "";
+		when(contactService.find(emptyTerm)).thenReturn(contacts);
 		when(contactToContactDtoConverter.convert(contacts)).thenReturn(contactDtos);
 
 		// Assert
-		ResultActions actions = mockMvc.perform(post("/phonebook/rpc/api/v1/findContacts/{term}", term));
-
-		actions.andExpect(status().isOk());
-		actions.andExpect(content().json(expectedJson));
+		mockMvc.perform(post("/phonebook/rpc/api/v1/findContacts/{term}", term))
+			.andExpect(status().isOk())
+			.andExpect(content().json(expectedJson));
 	}
 
 	@Test
-	@DisplayName("Setting contacts as deleted")
+	@DisplayName("Invoked setContactsAsDeleted() method in ContactService")
 	void shouldSetContactsAsDeleted() throws Exception {
 		List<Long> contactIdsToDelete = List.of(1L, 2L, 3L);
 		String json = mapper.writeValueAsString(contactIdsToDelete);
@@ -116,9 +125,23 @@ class PhonebookControllerTest {
 				.content(json))
 			.andExpect(status().isOk());
 
-		verify(contactService, times(1)).setAsDeleted(captor.capture());
+		verify(contactService, times(1)).setAsDeleted(listArgumentCaptor.capture());
 
-		List<Long> capturedContactIds = captor.getValue();
+		List<Long> capturedContactIds = listArgumentCaptor.getValue();
 		assertEquals(contactIdsToDelete, capturedContactIds);
+	}
+
+	@Test
+	@DisplayName("Invoked toggleContactImportance() method in ContactService")
+	void shouldToggleContactImportant() throws Exception {
+		Long toggledContactId = 1L;
+
+		mockMvc.perform(post("/phonebook/rpc/api/v1/toggleImportant/{id}", toggledContactId))
+			.andExpect(status().isOk());
+
+		verify(contactService, times(1)).toggleImportant(argumentCaptor.capture());
+
+		Long capturedContactId = argumentCaptor.getValue();
+		assertEquals(toggledContactId, capturedContactId);
 	}
 }

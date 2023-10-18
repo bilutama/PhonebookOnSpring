@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @DisplayName("Contact Entity equals() and hashCode()")
-public class ContactTest {
+class ContactTest {
 	@Test
 	@DisplayName("equals()")
 	void shouldTestEquals() {
