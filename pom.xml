@@ -89,6 +89,21 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- PITest for mutation testing-->
+        <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-parent</artifactId>
+            <version>1.14.2</version>
+            <type>pom</type>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.pitest/pitest-junit5-plugin -->
+        <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-junit5-plugin</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
         <!-- SLF4J dependencies -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -179,6 +194,20 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.14.2</version>
+                <configuration>
+                    <targetClasses>
+                        <param>phonebook.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>phonebook.*</param>
+                    </targetTests>
+                </configuration>
             </plugin>
         </plugins>
     </build>
