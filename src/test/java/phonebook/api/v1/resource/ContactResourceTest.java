@@ -1,4 +1,4 @@
-package phonebook.controller;
+package phonebook.api.v1.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -31,9 +31,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PhonebookController.class)
+@WebMvcTest(ContactResource.class)
 @DisplayName("Phonebook Controller")
-class PhonebookControllerTest {
+class ContactResourceTest {
 
 	@MockBean
 	private ContactService contactService;
