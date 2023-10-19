@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface CallService {
 
-	void saveCall(Call call);
+	void save(Call call);
 
-	List<Call> getCalls(Long callContactId);
+	List<Call> getAllByContactId(Long callContactId);
 
-	void setCallsAsDeleted(List<Long> callIds);
+	void setAsDeleted(List<Long> callIds);
 }

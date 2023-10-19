@@ -11,7 +11,7 @@ public interface ContactService {
 
 	ContactValidation save(Contact contact);
 
-	List<Contact> find(String term);
+	List<Contact> findByTerm(String term);
 
 	void setAsDeleted(List<Long> contactsIds);
 

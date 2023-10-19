@@ -2,12 +2,11 @@ package phonebook.api.v1.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import phonebook.converters.contact.ContactDtoToContactConverter;
 import phonebook.converters.contact.ContactToContactDtoConverter;
 import phonebook.dto.ContactDto;
@@ -17,7 +16,7 @@ import phonebook.service.ContactService;
 import java.util.Arrays;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/phonebook/rpc/api/v1")
 public class ContactResource {
 	private static final Logger logger = LoggerFactory.getLogger(ContactResource.class);
@@ -39,7 +38,6 @@ public class ContactResource {
 	}
 
 	@PostMapping(value = {"findContacts", "findContacts/{term}"})
-	@ResponseBody
 	public List<ContactDto> findContacts(@PathVariable(required = false) String term) {
 		if (term == null) {
 			logger.info("Received POST request to find all contacts");
@@ -48,11 +46,10 @@ public class ContactResource {
 			logger.info("Received POST request to find contacts with term=\"{}\"", term);
 		}
 
-		return contactToContactDtoConverter.convert(contactService.find(term));
+		return contactToContactDtoConverter.convert(contactService.findByTerm(term));
 	}
 
 	@PostMapping(value = "saveContact")
-	@ResponseBody
 	public ContactValidation saveContact(@RequestBody ContactDto contactDto) {
 		logger.info(
 			"Received POST request to save a new contact for {} {}, phone {}",
@@ -65,7 +62,6 @@ public class ContactResource {
 	}
 
 	@PostMapping(value = "deleteContacts")
-	@ResponseBody
 	public void setContactsAsDeleted(@RequestBody List<Long> contactIds) {
 		contactService.setAsDeleted(contactIds);
 
@@ -74,7 +70,6 @@ public class ContactResource {
 	}
 
 	@PostMapping(value = "toggleImportant/{contactId}")
-	@ResponseBody
 	public void toggleImportant(@PathVariable Long contactId) {
 		contactService.toggleImportant(contactId);
 

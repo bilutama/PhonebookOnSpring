@@ -18,17 +18,17 @@ public class CallServiceImpl implements CallService {
 	}
 
 	@Override
-	public void saveCall(Call call) {
+	public void save(Call call) {
 		callRepository.save(call);
 	}
 
 	@Override
-	public List<Call> getCalls(Long contactId) {
+	public List<Call> getAllByContactId(Long contactId) {
 		return callRepository.findCallByCallContactId(contactId);
 	}
 
 	@Override
-	public void setCallsAsDeleted(List<Long> callIds) {
+	public void setAsDeleted(List<Long> callIds) {
 		callRepository.setDeletedByIds(callIds);
 	}
 }

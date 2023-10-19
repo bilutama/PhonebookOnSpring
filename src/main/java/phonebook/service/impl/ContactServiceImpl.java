@@ -71,7 +71,7 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	@Override
-	public List<Contact> find(String term) {
+	public List<Contact> findByTerm(String term) {
 		if (term == null) {
 			return contactRepository.findContacts(null);
 		}
