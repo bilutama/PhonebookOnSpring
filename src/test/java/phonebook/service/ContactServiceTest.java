@@ -122,7 +122,7 @@ class ContactServiceTest {
 
 		when(contactRepository.findContacts(searchTerm)).thenReturn(expectedContacts);
 
-		List<Contact> result = contactService.find(searchTerm);
+		List<Contact> result = contactService.findByTerm(searchTerm);
 
 		assertEquals(expectedContacts, result);
 		verify(contactRepository, times(1)).findContacts(searchTerm);
@@ -140,7 +140,7 @@ class ContactServiceTest {
 		final String finalSearchTerm = term == null ? null : term.trim();
 		when(contactRepository.findContacts(finalSearchTerm)).thenReturn(expectedContacts);
 
-		List<Contact> result = contactService.find(term);
+		List<Contact> result = contactService.findByTerm(term);
 
 		assertEquals(expectedContacts, result);
 		verify(contactRepository, times(1)).findContacts(finalSearchTerm);

@@ -32,26 +32,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ContactResource.class)
-@DisplayName("Phonebook Controller")
+@DisplayName("Contact Controller Tests")
 class ContactResourceTest {
 
 	@MockBean
 	private ContactService contactService;
 
 	@MockBean
-	private ContactDtoToContactConverter contactDtoToContactConverter;
-
-	@MockBean
 	private ContactToContactDtoConverter contactToContactDtoConverter;
 
 	@MockBean
-	private CallService callService;
-
-	@MockBean
-	private CallDtoToCallConverter callDtoToCallConverter;
-
-	@MockBean
-	private CallToCallDtoConverter callToCallDtoConverter;
+	private ContactDtoToContactConverter contactDtoToContactConverter;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -80,7 +71,7 @@ class ContactResourceTest {
 		String expectedJson = mapper.writeValueAsString(contactDtos);
 
 		// Mocking behaviour
-		when(contactService.find(null)).thenReturn(contacts);
+		when(contactService.findByTerm(null)).thenReturn(contacts);
 		when(contactToContactDtoConverter.convert(contacts)).thenReturn(contactDtos);
 
 		// Assert
@@ -105,7 +96,7 @@ class ContactResourceTest {
 
 		// Mocking behaviour
 		String emptyTerm = "";
-		when(contactService.find(emptyTerm)).thenReturn(contacts);
+		when(contactService.findByTerm(emptyTerm)).thenReturn(contacts);
 		when(contactToContactDtoConverter.convert(contacts)).thenReturn(contactDtos);
 
 		// Assert
