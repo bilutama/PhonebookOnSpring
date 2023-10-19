@@ -7,14 +7,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import phonebook.converters.contact.ContactDtoToContactConverter;
 import phonebook.converters.contact.ContactToContactDtoConverter;
 import phonebook.dto.ContactDto;
@@ -144,29 +141,26 @@ class ContactResourceTest {
 	@Test
 	@DisplayName("Invoked saveContact() method in ContactService")
 	void shouldSaveContact() throws Exception {
+		// Given
 		ContactDto contactDto = new ContactDto();
-		contactDto.setFirstName("John");
-		contactDto.setLastName("Doe");
-		contactDto.setPhone("+1234567890");
-
-		Contact contact = new Contact("John", "Doe", "+1234567890");
-
 		String jsonDto = mapper.writeValueAsString(contactDto);
+
+		Contact contact = new Contact();
+
 		ContactValidation validation = new ContactValidation();
 		validation.setValid(true);
-		validation.setError(null);
+		String expectedJson = mapper.writeValueAsString(validation);
 
 		// Mocking behaviour
-		when(contactService.save(any(Contact.class))).thenReturn(validation);
-		when(contactDtoToContactConverter.convert(contactDto)).thenReturn(contact);
+		when(contactDtoToContactConverter.convert(any(ContactDto.class))).thenReturn(contact);
+		when(contactService.save(contact)).thenReturn(validation);
 
-		String validationJson = mapper.writeValueAsString(validation);
-
-		ResultActions resultActions = mockMvc.perform(post("/phonebook/rpc/api/v1/saveContact")
+		// Perform and assert
+		mockMvc.perform(post("/phonebook/rpc/api/v1/saveContact")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(jsonDto))
 			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-			.andExpect(content().json(validationJson))
+			.andExpect(content().json(expectedJson))
 			.andExpect(status().isOk());
 
 		verify(contactService, times(1)).save(argumentCaptorForContact.capture());

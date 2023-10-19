@@ -37,7 +37,7 @@ public class ContactResource {
 		this.contactToContactDtoConverter = contactToContactDtoConverter;
 	}
 
-	@PostMapping(value = {"findContacts", "findContacts/{term}"}, produces = "application/json")
+	@PostMapping(value = {"findContacts", "findContacts/{term}"})
 	public List<ContactDto> findContacts(@PathVariable(required = false) String term) {
 		if (term == null) {
 			logger.info("Received POST request to find all contacts");
@@ -49,7 +49,7 @@ public class ContactResource {
 		return contactToContactDtoConverter.convert(contactService.findByTerm(term));
 	}
 
-	@PostMapping(value = "saveContact", produces = "application/json")
+	@PostMapping(value = "saveContact")
 	public ContactValidation saveContact(@RequestBody ContactDto contactDto) {
 		logger.info(
 			"Received POST request to save a new contact for {} {}, phone {}",
