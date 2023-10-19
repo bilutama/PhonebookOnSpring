@@ -22,8 +22,9 @@ class ContactRepositoryTest {
 		// Create sample contacts that match the search term
 		Contact contact1 = new Contact("John", "Doe", "+1234567890");
 		Contact contact2 = new Contact("Jane", "Smith", "+1098765432");
+		Contact contact3 = new Contact("Mark", "Smith", "+1312312558");
 
-		contactRepository.saveAll(List.of(contact1, contact2));
+		contactRepository.saveAll(List.of(contact1, contact2, contact3));
 	}
 
 	@Test
@@ -32,9 +33,10 @@ class ContactRepositoryTest {
 		// Given
 		Contact contact1 = new Contact("John", "Doe", "+1234567890");
 		Contact contact2 = new Contact("Jane", "Smith", "+1098765432");
-		List<Contact> expected = List.of(contact1, contact2);
+		Contact contact3 = new Contact("Mark", "Smith", "+1312312558");
+		List<Contact> expected = List.of(contact1, contact2, contact3);
 
-			// Find in the repository
+		// Find in the repository
 		List<Contact> result = contactRepository.findContacts("");
 
 		// Assert
@@ -45,9 +47,12 @@ class ContactRepositoryTest {
 	@DisplayName("Searching contacts in the repository by search term")
 	void shouldFindContactBySearchTerm() {
 		// Given
+		Contact contact1 = new Contact("Jane", "Smith", "+1098765432");
+		Contact contact2 = new Contact("Mark", "Smith", "+1312312558");
+
 		Contact contact = new Contact("John", "Doe", "+1234567890");
-		List<Contact> expected = List.of(contact);
-		String searchTerm = "John";
+		List<Contact> expected = List.of(contact1, contact2);
+		String searchTerm = "smit";
 
 		// Find in the repository
 		List<Contact> result = contactRepository.findContacts(searchTerm);

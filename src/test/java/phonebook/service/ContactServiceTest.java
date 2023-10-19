@@ -34,6 +34,7 @@ import static org.mockito.Mockito.when;
 class ContactServiceTest {
 	@InjectMocks
 	ContactServiceImpl contactService;
+
 	@Captor
 	ArgumentCaptor<List<Long>> listArgumentCaptor;
 

@@ -7,23 +7,25 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import phonebook.converters.call.CallDtoToCallConverter;
-import phonebook.converters.call.CallToCallDtoConverter;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 import phonebook.converters.contact.ContactDtoToContactConverter;
 import phonebook.converters.contact.ContactToContactDtoConverter;
 import phonebook.dto.ContactDto;
 import phonebook.model.Contact;
-import phonebook.service.CallService;
+import phonebook.model.ContactValidation;
 import phonebook.service.ContactService;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,6 +36,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ContactResource.class)
 @DisplayName("Contact Controller Tests")
 class ContactResourceTest {
+
+	@Captor
+	ArgumentCaptor<List<Long>> listArgumentCaptor;
+
+	@Captor
+	ArgumentCaptor<Contact> argumentCaptorForContact;
+
+	@Captor
+	ArgumentCaptor<Long> argumentCaptorForLong;
 
 	@MockBean
 	private ContactService contactService;
@@ -46,12 +57,6 @@ class ContactResourceTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-
-	@Captor
-	ArgumentCaptor<List<Long>> listArgumentCaptor;
-
-	@Captor
-	ArgumentCaptor<Long> argumentCaptor;
 
 	@Autowired
 	private ObjectMapper mapper;
@@ -130,9 +135,41 @@ class ContactResourceTest {
 		mockMvc.perform(post("/phonebook/rpc/api/v1/toggleImportant/{id}", toggledContactId))
 			.andExpect(status().isOk());
 
-		verify(contactService, times(1)).toggleImportant(argumentCaptor.capture());
+		verify(contactService, times(1)).toggleImportant(argumentCaptorForLong.capture());
 
-		Long capturedContactId = argumentCaptor.getValue();
+		Long capturedContactId = argumentCaptorForLong.getValue();
 		assertEquals(toggledContactId, capturedContactId);
+	}
+
+	@Test
+	@DisplayName("Invoked saveContact() method in ContactService")
+	void shouldSaveContact() throws Exception {
+		ContactDto contactDto = new ContactDto();
+		contactDto.setFirstName("John");
+		contactDto.setLastName("Doe");
+		contactDto.setPhone("+1234567890");
+
+		Contact contact = new Contact("John", "Doe", "+1234567890");
+
+		String jsonDto = mapper.writeValueAsString(contactDto);
+		ContactValidation validation = new ContactValidation();
+		validation.setValid(true);
+		validation.setError(null);
+
+		// Mocking behaviour
+		when(contactService.save(any(Contact.class))).thenReturn(validation);
+		when(contactDtoToContactConverter.convert(contactDto)).thenReturn(contact);
+
+		String validationJson = mapper.writeValueAsString(validation);
+
+		ResultActions resultActions = mockMvc.perform(post("/phonebook/rpc/api/v1/saveContact")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(jsonDto))
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+			.andExpect(content().json(validationJson))
+			.andExpect(status().isOk());
+
+		verify(contactService, times(1)).save(argumentCaptorForContact.capture());
+		assertEquals(argumentCaptorForContact.getValue(), contact);
 	}
 }
