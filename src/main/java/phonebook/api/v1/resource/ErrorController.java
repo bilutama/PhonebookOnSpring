@@ -1,4 +1,4 @@
-package phonebook.controller;
+package phonebook.api.v1.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
