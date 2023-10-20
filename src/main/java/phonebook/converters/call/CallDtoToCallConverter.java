@@ -14,7 +14,6 @@ public class CallDtoToCallConverter extends AbstractConverter<CallDto, Call> {
 		c.setId(source.getId());
 		c.setCallContactId(source.getCallContactId());
 		c.setCallTime(source.getCallTime());
-		c.setDeleted(false);
 
 		return c;
 	}

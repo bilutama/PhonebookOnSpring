@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import phonebook.dto.ContactDto;
 import phonebook.model.Contact;
 
@@ -20,16 +22,17 @@ class ContactDtoToContactConverterTest {
 		converter = new ContactDtoToContactConverter();
 	}
 
-	@Test
+	@ParameterizedTest
+	@ValueSource(booleans = {true, false})
 	@DisplayName("Convert a single contact")
-	void testConverterForSingleContact() {
+	void testConverterForSingleContact(boolean isImportant) {
 		// Given
 		ContactDto source = new ContactDto();
 		source.setId(1L);
 		source.setFirstName("Ivan");
 		source.setLastName("Ivanov");
 		source.setPhone("+7-123-456-7890");
-		source.setImportant(false);
+		source.setImportant(isImportant);
 
 		// Call the method
 		Contact result = converter.convert(source);
@@ -43,23 +46,24 @@ class ContactDtoToContactConverterTest {
 		Assertions.assertFalse(result.getIsDeleted());
 	}
 
-	@Test
+	@ParameterizedTest
+	@CsvSource({"true,false", "false,true", "true,true", "false,false"})
 	@DisplayName("Convert list of contacts")
-	void testConverterForContactsList() {
+	void testConverterForContactsList(boolean isImportant1, boolean isImportant2) {
 		// Given
 		ContactDto source1 = new ContactDto();
 		source1.setId(1L);
 		source1.setFirstName("Ivan");
 		source1.setLastName("Ivanov");
 		source1.setPhone("+7-123-456-7890");
-		source1.setImportant(false);
+		source1.setImportant(isImportant1);
 
 		ContactDto source2 = new ContactDto();
 		source2.setId(2L);
 		source2.setFirstName("Peter");
 		source2.setLastName("Petrov");
 		source2.setPhone("+7-123-456-0987");
-		source2.setImportant(true);
+		source2.setImportant(isImportant2);
 
 		List<ContactDto> contactDtoList = List.of(source1, source2);
 
