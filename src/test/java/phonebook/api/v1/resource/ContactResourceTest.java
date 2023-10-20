@@ -59,7 +59,7 @@ class ContactResourceTest {
 	private ObjectMapper mapper;
 
 	@Test
-	@DisplayName("Should return all contacts with null term")
+	@DisplayName("Invoked findContacts() with null term")
 	void shouldReturnAllContacts() throws Exception {
 		// Given
 		Contact contact1 = new Contact();
@@ -84,6 +84,7 @@ class ContactResourceTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = {" ", "  ", "   ", "     "})
+	@DisplayName("Invoked findContacts() with empty term")
 	void shouldFindAllContactsWithEmptySearchTerm(String term) throws Exception {
 		// Given
 		Contact contact1 = new Contact();

@@ -38,14 +38,14 @@ public class CallResource {
 	}
 
 	@PostMapping(value = "saveCall")
-	public void saveCall(@RequestBody Long callId) {
-		CallDto call = new CallDto();
-		call.setCallContactId(callId);
-		call.setCallTime(new Timestamp(System.currentTimeMillis()));
+	public void saveCall(@RequestBody Long callRecipientId) {
+		CallDto callDto = new CallDto();
+		callDto.setCallContactId(callRecipientId);
+		callDto.setCallTime(new Timestamp(System.currentTimeMillis()));
 
-		callService.save(callDtoToCallConverter.convert(call));
+		callService.save(callDtoToCallConverter.convert(callDto));
 
-		logger.info("Received POST request to call the contact with ID={}", callId);
+		logger.info("Received POST request to call the contact with ID={}", callRecipientId);
 	}
 
 	@PostMapping(value = {"findCallsByContactId/{callContactId}"})
