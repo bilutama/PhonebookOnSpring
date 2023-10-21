@@ -16,6 +16,7 @@ import phonebook.dto.CallDto;
 import phonebook.model.Call;
 import phonebook.service.CallService;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,7 +71,7 @@ class CallResourceTest {
 		String expectedJson = mapper.writeValueAsString(callDtos);
 
 		// Mocking behaviour
-		when(callService.getAllByContactId(contactId)).thenReturn(calls);
+		when(callService.findAllByContactId(contactId)).thenReturn(calls);
 		when(callToCallDtoConverter.convert(calls)).thenReturn(callDtos);
 
 		// Perform and assert
@@ -103,7 +104,8 @@ class CallResourceTest {
 	void shouldSaveCall() throws Exception {
 		// Given
 		long callRecipientId = 1L;
-		Call call = new Call();
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		Call call = new Call(callRecipientId, timestamp);
 
 		// Mocking behaviour
 		when(callDtoToCallConverter.convert(any(CallDto.class))).thenReturn(call);

@@ -33,6 +33,7 @@ class ContactToContactDtoConverterTest {
 		source.setLastName("Ivanov");
 		source.setPhone("+7-123-456-7890");
 		source.setImportant(isImportant);
+		source.setDeleted(false);
 
 		// Call the method
 		ContactDto result = converter.convert(source);
@@ -56,6 +57,7 @@ class ContactToContactDtoConverterTest {
 		source1.setLastName("Ivanov");
 		source1.setPhone("+7-123-456-7890");
 		source1.setImportant(isImportant1);
+		source1.setDeleted(false);
 
 		Contact source2 = new Contact();
 		source2.setId(2L);
@@ -63,6 +65,7 @@ class ContactToContactDtoConverterTest {
 		source2.setLastName("Petrov");
 		source2.setPhone("+7-123-456-0987");
 		source2.setImportant(isImportant2);
+		source2.setDeleted(false);
 
 		List<Contact> contactList = List.of(source1, source2);
 

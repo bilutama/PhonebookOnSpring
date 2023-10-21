@@ -24,6 +24,17 @@ public class Call {
 	@Column
 	private boolean isDeleted;
 
+	public Call() {
+	}
+
+	public Call(
+		Long callContactId,
+		Timestamp callTime
+	) {
+		this.callContactId = callContactId;
+		this.callTime = callTime;
+	}
+
 	public boolean isDeleted() {
 		return isDeleted;
 	}

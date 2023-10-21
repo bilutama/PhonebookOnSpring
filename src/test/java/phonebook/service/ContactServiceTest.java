@@ -35,13 +35,14 @@ class ContactServiceTest {
 	@InjectMocks
 	ContactServiceImpl contactService;
 
+	@Mock
+	private ContactRepository contactRepository;
+
 	@Captor
 	ArgumentCaptor<List<Long>> listArgumentCaptor;
 
 	@Captor
 	ArgumentCaptor<Long> argumentCaptor;
-	@Mock
-	private ContactRepository contactRepository;
 
 	@Test
 	@DisplayName("Contact is not validated - first name is empty")

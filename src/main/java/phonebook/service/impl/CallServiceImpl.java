@@ -23,7 +23,7 @@ public class CallServiceImpl implements CallService {
 	}
 
 	@Override
-	public List<Call> getAllByContactId(Long contactId) {
+	public List<Call> findAllByContactId(Long contactId) {
 		return callRepository.findCallByCallContactId(contactId);
 	}
 

@@ -39,27 +39,24 @@ public class CallResource {
 
 	@PostMapping(value = "saveCall")
 	public void saveCall(@RequestBody Long callRecipientId) {
-		CallDto callDto = new CallDto();
-		callDto.setCallContactId(callRecipientId);
-		callDto.setCallTime(new Timestamp(System.currentTimeMillis()));
-
-		callService.save(callDtoToCallConverter.convert(callDto));
-
 		logger.info("Received POST request to call the contact with ID={}", callRecipientId);
+
+		CallDto callDto = new CallDto(callRecipientId, new Timestamp(System.currentTimeMillis()));
+		callService.save(callDtoToCallConverter.convert(callDto));
 	}
 
 	@PostMapping(value = {"findCallsByContactId/{callContactId}"})
 	public List<CallDto> findCallsByContactId(@PathVariable Long callContactId) {
 		logger.info("Received POST request to find calls for contact with id={}", callContactId);
 
-		return callToCallDtoConverter.convert(callService.getAllByContactId(callContactId));
+		return callToCallDtoConverter.convert(callService.findAllByContactId(callContactId));
 	}
 
 	@PostMapping(value = "deleteCalls")
 	public void setCallsAsDeleted(@RequestBody List<Long> callsIds) {
-		callService.setAsDeleted(callsIds);
-
 		String ids = Arrays.toString(callsIds.toArray());
-		logger.info("Received POST request to set calls with IDs={} as deleted.", ids);
+		logger.info("Received POST request to set calls with IDs={} as deleted", ids);
+
+		callService.setAsDeleted(callsIds);
 	}
 }

@@ -63,16 +63,16 @@ public class ContactResource {
 
 	@PostMapping(value = "deleteContacts")
 	public void setContactsAsDeleted(@RequestBody List<Long> contactIds) {
-		contactService.setAsDeleted(contactIds);
-
 		String ids = Arrays.toString(contactIds.toArray());
 		logger.info("Received POST request to set contacts with IDs={} as deleted", ids);
+
+		contactService.setAsDeleted(contactIds);
 	}
 
 	@PostMapping(value = "toggleImportant/{contactId}")
 	public void toggleImportant(@PathVariable Long contactId) {
-		contactService.toggleImportant(contactId);
-
 		logger.info("Received POST request to toggle importance for contact ID={}", contactId);
+
+		contactService.toggleImportant(contactId);
 	}
 }
