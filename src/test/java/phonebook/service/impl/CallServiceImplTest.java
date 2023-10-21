@@ -38,8 +38,9 @@ class CallServiceTest {
 	@Test
 	@DisplayName("Call is saved")
 	void shouldSaveCall() {
+		Long callContactId = 1L;
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		Call call = new Call(timestamp);
+		Call call = new Call(callContactId, timestamp);
 
 		callService.save(call);
 
@@ -50,17 +51,17 @@ class CallServiceTest {
 	@Test
 	@DisplayName("Found calls for the contact")
 	void shouldFindAllByContactId() {
-		Long contactId = 1L;
+		Long callContactId = 1L;
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		Call call = new Call(timestamp);
+		Call call = new Call(callContactId, timestamp);
 		List<Call> expectedCalls = List.of(call);
 
-		when(callRepository.findCallByCallContactId(contactId)).thenReturn(expectedCalls);
+		when(callRepository.findCallByCallContactId(callContactId)).thenReturn(expectedCalls);
 
-		List<Call> result = callService.findAllByContactId(contactId);
+		List<Call> result = callService.findAllByContactId(callContactId);
 
 		assertEquals(expectedCalls, result);
-		verify(callRepository, times(1)).findCallByCallContactId(contactId);
+		verify(callRepository, times(1)).findCallByCallContactId(callContactId);
 	}
 
 	@Test
