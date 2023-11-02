@@ -168,7 +168,7 @@ new Vue({
             });
         },
 
-        addCall(contactId) {
+        saveCall(contactId) {
             $.ajax({
                 type: "POST",
                 url: "/phonebook/rpc/api/v1/saveCall",
