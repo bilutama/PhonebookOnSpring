@@ -8,7 +8,7 @@
 **Project functionality**
 - Display existing contacts
 - Adding new contacts
-- Deleting contacts (without actual deleting records from the database)
+- Deleting contacts (setting records as deleted)
 - Switching <importance> of contacts
 - Mock calls
 
